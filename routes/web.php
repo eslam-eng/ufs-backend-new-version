@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ActivationStatus;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/migrate-fresh/{password}', function ($password) {
+    if ($password == 150024){
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh --seed');
+        return "migrate fresh success";
+    }
+});
+
+Route::get('test',function (){
+    dd( ActivationStatus::ACTIVE());
 });

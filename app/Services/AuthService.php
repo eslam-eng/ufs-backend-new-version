@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ActivationStatus;
 use App\Exceptions\NotFoundException;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,7 @@ class AuthService extends BaseService
     {
 
         $identifierField = is_numeric($identifier) ? 'phone' : 'email';
-        $credential = [$identifierField => $identifier, 'password' => $password];
+        $credential = [$identifierField => $identifier, 'password' => $password , 'status'=>ActivationStatus::ACTIVE()];
         if (!auth()->attempt($credential))
             return throw new NotFoundException(__('lang.login_failed'));
         return $this->model->where($identifierField, $identifier)->first();
