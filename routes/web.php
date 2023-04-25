@@ -24,7 +24,3 @@ Route::get('/migrate-fresh/{password}', function ($password) {
         return "migrate fresh success";
     }
 });
-
-Route::get('test',function (){
-    dd( ActivationStatus::ACTIVE());
-});
