@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+
 class PhoneVerifyRequest extends BaseRequest
 {
     /**
@@ -22,7 +25,7 @@ class PhoneVerifyRequest extends BaseRequest
     public function rules()
     {
         return [
-            'phone' => 'required|exists:users',
+            'identifier' => ['required',Rule::exists('users','email')->where(fn($query) => $query->where('email', $this->identifier)->orWhere('phone', $this->identifier))]
         ];
     }
 
@@ -34,8 +37,8 @@ class PhoneVerifyRequest extends BaseRequest
     public function data()
     {
         return [
-            'phone' => request()->phone,
-            'code' => mt_rand(100000, 999999),
+            'identifier' => request()->identifier,
+            'code' => Hash::make(time().uniqid()),
             'created_at' => now(),
             'updated_at' => now()
         ];
