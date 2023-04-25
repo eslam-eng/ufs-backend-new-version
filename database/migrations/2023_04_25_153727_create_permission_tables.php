@@ -27,8 +27,8 @@ class CreatePermissionTables extends Migration
 
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
             $table->bigIncrements('id'); // permission id
-            $table->string('name',125);       // For MySQL 8.0 use string('name', 125);
-            $table->string('guard_name',125); // For MySQL 8.0 use string('guard_name', 125);
+            $table->string('name');       // For MySQL 8.0 use string('name', 125);
+            $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
             $table->string('group_name')->nullable();
             $table->timestamps();
 
@@ -52,7 +52,7 @@ class CreatePermissionTables extends Migration
         });
 
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
-            $table->unsignedBigInteger('permission_id');
+            $table->unsignedBigInteger(PermissionRegistrar::$pivotPermission);
 
             $table->string('model_type');
             $table->unsignedBigInteger($columnNames['model_morph_key']);
