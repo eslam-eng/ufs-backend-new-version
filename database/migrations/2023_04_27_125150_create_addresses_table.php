@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Location::class,'city_id')->constrained('locations')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Location::class,'area_id')->constrained('locations')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('postal_code')->nullable();
-            $table->boolean('is_default')->default(\App\Enums\ActivationStatus::ACTIVE->value);
+            $table->boolean('is_default')->default(\App\Enums\ActivationStatus::INACTIVE->value);
             $table->timestamps();
         });
     }
