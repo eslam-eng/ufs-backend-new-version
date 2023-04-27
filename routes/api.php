@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PhoneVerifyController;
+use App\Http\Controllers\Api\ReceiverController;
 use App\Http\Controllers\Api\RestPasswordController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,5 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'user','middleware' => 'auth:sanctum'], function () {
     Route::post('set-fcm-token', [AuthController::class, 'setFcmToken']);
 });
+
+Route::resource('receiver', ReceiverController::class);
