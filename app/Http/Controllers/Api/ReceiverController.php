@@ -19,6 +19,22 @@ class ReceiverController extends Controller
 
     }
 
+    /**
+     * get all receivers
+     */
+    public function index()
+    {
+        try{
+            $filters       = [];
+            $withRelations = [];
+            $receivers = $this->receiverService->queryGet(filters: $filters, with: $withRelations);
+            if(!$receivers)
+                return apiResponse(message: trans('something_went_roing'), code: 422);
+            return apiResponse(data: ReceiverResource::collection($receivers), message: trans('success_operation'));
+        }catch(Exception $e){
+            return apiResponse(message: trans('something_went_roing'), code: 422);
+        }
+    }
     public function store(ReceiverStoreRequest $request)
     {
         try{

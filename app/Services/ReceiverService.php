@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class ReceiverService extends BaseService
 {
+
+    public function queryGet(array $filters = [], array $with = [])
+    {
+        return Receiver::with($with)->get();
+    }
+
     /**
      * create new receiver
      * @param array $data

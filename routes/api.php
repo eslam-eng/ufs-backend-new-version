@@ -28,4 +28,4 @@ Route::group(['prefix' => 'user','middleware' => 'auth:sanctum'], function () {
     Route::post('set-fcm-token', [AuthController::class, 'setFcmToken']);
 });
 
-Route::resource('receiver', ReceiverController::class);
+Route::resource('receivers', ReceiverController::class);
