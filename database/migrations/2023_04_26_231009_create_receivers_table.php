@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Branch::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Location::class,'city_id')->cascadeOnUpdate()->constrained('locations')->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Location::class,'area_id')->cascadeOnUpdate()->constrained('locations')->cascadeOnDelete();
-            $table->integer('reference');
+            $table->string('reference');
             $table->string('title');
             $table->text('notes');
 

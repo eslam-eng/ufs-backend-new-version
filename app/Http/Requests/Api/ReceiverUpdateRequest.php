@@ -29,7 +29,7 @@ class ReceiverUpdateRequest extends FormRequest
             'branch_id'    => 'required|integer|exists:branches,id',
             'city_id'      => 'required|integer|exists:locations,id',
             'area_id'      => 'required|integer|exists:locations,id',
-            'reference'    => 'required|integer',
+            'reference'    => 'required|string',
             'title'        => 'required|string',
             'notes'        => 'required|string',
         ];

@@ -29,7 +29,7 @@ class ReceiverStoreRequest extends FormRequest
             'branch_id'    => 'required|numeric|exists:branches,id',
             'city_id'      => 'required|numeric|exists:locations,id',
             'area_id'      => 'required|numeric|exists:locations,id',
-            'reference'    => 'required|numeric',
+            'reference'    => 'required|string',
             'title'        => 'required|string',
             'notes'        => 'required|string',
         ];
