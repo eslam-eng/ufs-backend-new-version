@@ -2,17 +2,31 @@
 
 namespace App\Services;
 
-use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Receiver;
+use App\QueryFilters\ReceiversFilters;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class ReceiverService extends BaseService
 {
 
-    public function queryGet(array $filters = [], array $with = [])
+    public function __construct(private Receiver $model)
     {
-        return Receiver::with($with)->get();
+        
+    }
+
+    //method for api with pagination
+    public function listing(array $whereConditions = [],$withRelations = [],$perPage=10)
+    {
+        return $this->receiverQueryBuilder(whereConditions: $whereConditions, withRelations: $withRelations)->cursorPaginate($perPage);
+    }
+
+    public function receiverQueryBuilder(array $whereConditions = [],array $withRelations = []): Builder
+    { 
+        $recevers = $this->model->query()->with($withRelations);
+        return $recevers->filter(new ReceiversFilters($whereConditions));
     }
 
     /**
@@ -22,7 +36,13 @@ class ReceiverService extends BaseService
      */
     public function store(array $data = []): Model
     {
-        return Receiver::create($data);
+        $receiver = $this->model->create($data);
+        if(isset($data['addresses']))
+            foreach($data['addresses'] as $address)
+            {
+                $receiver->storeAddress(Arr::wrap($address));
+            }
+        return $receiver;
     }
 
     /**
@@ -33,8 +53,13 @@ class ReceiverService extends BaseService
      */
     public function update(array $data = [], int $id): Model
     {
-        $receiver = Receiver::find($id);
+        $receiver = $this->model->find($id);
         $receiver->update($data);
+        if(isset($data['addresses']))
+            foreach($data['addresses'] as $address)
+            {
+                $receiver->updateAddress(Arr::wrap($address));
+            }
         return $receiver;
     }
 
@@ -45,8 +70,9 @@ class ReceiverService extends BaseService
      */
     public function destroy(int $id): bool
     {
-        $receiver = Receiver::find($id);
+        $receiver = $this->model->find($id);
         $receiver->delete();
+        $receiver->deleteAddresses();
         return true;
     }
 }

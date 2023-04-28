@@ -15,14 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
-            $table->string('company_name');
-            $table->string('branch_name');
+            $table->foreignIdFor(\App\Models\Company::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Branch::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Location::class,'city_id')->cascadeOnUpdate()->constrained('locations')->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Location::class,'area_id')->cascadeOnUpdate()->constrained('locations')->cascadeOnDelete();
-            $table->string('reference');
-            $table->string('title');
-            $table->text('notes');
+            $table->string('reference')->unique()->nullable();
+            $table->string('title')->nullable();
+            $table->text('notes')->nullable();
 
             $table->timestamps();
         });

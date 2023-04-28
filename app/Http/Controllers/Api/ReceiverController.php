@@ -27,12 +27,10 @@ class ReceiverController extends Controller
         try{
             $filters       = [];
             $withRelations = [];
-            $receivers = $this->receiverService->queryGet(filters: $filters, with: $withRelations);
-            if(!$receivers)
-                return apiResponse(message: trans('something_went_roing'), code: 422);
-            return apiResponse(data: ReceiverResource::collection($receivers), message: trans('success_operation'));
+            $receivers = $this->receiverService->listing(whereConditions: $filters, withRelations: $withRelations);
+            return ReceiverResource::collection($receivers);
         }catch(Exception $e){
-            return apiResponse(message: trans('something_went_roing'), code: 422);
+            return apiResponse(message: trans('lang.something_went_rong'), code: 422);
         }
     }
     public function store(ReceiverStoreRequest $request)

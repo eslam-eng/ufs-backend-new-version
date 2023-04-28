@@ -20,12 +20,11 @@ class ReceiverResource extends JsonResource
             'phone'        => $this->phone,
             'company_name' => $this->company_name,
             'branch_name'  => $this->branch_name,
+            'city_name'    => $this->branch_name,
+            'area_name'    => $this->area_name,
             'reference'    => $this->reference,
             'title'        => $this->title,
             'notes'        => $this->notes,
-            'branch_id'    => $this->whenLoaded('branch', new BranchResource($this->branch)),
-            'city_id'      => $this->whenLoaded('city',   new BranchResource($this->city)),
-            'area_id'      => $this->whenLoaded('area',   new BranchResource($this->area)),
         ];
     }
 }

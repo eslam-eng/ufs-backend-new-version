@@ -24,14 +24,15 @@ class ReceiverStoreRequest extends FormRequest
         return [
             'name'         => 'required|string',
             'phone'        => 'required|numeric|unique:receivers,phone',
-            'company_name' => 'required|string',
-            'branch_name'  => 'required|string',
+            'company_id'   => 'required|integer|exists:companies,id',
             'branch_id'    => 'required|numeric|exists:branches,id',
             'city_id'      => 'required|numeric|exists:locations,id',
             'area_id'      => 'required|numeric|exists:locations,id',
-            'reference'    => 'required|string',
-            'title'        => 'required|string',
-            'notes'        => 'required|string',
+            'reference'    => 'nullable|string|unique:receivers,reference',
+            'title'        => 'nullable|string',
+            'notes'        => 'nullable|string',
+            'addresses'    => 'required|array',
+            'addresses.*'  => 'required|array',
         ];
     }
 }
