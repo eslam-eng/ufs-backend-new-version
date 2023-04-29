@@ -36,7 +36,7 @@ class ReceiverService extends BaseService
     /**
      * create new receiver
      * @param array $data
-     * @return Model
+     * @return bool
      */
     public function store(array $data = []): bool
     {
@@ -49,7 +49,7 @@ class ReceiverService extends BaseService
      * update existing receiver
      * @param array $data
      * @param int $id
-     * @return Model
+     * @return bool
      * @throws NotFoundException
      */
     public function update(int $id, array $data = []): bool
