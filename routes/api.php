@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PhoneVerifyController;
+use App\Http\Controllers\Api\ReceiverController;
 use App\Http\Controllers\Api\RestPasswordController;
 use App\Http\Controllers\Api\LocationsController;
 use App\Http\Controllers\Api\CompanyController;
@@ -39,7 +40,7 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::group(['prefix' => 'company'],function (){
         Route::get('{id}',[CompanyController::class,'getCompanyById']);
     });
+
+    Route::resource('receivers', ReceiverController::class);
+
 });
-
-
-
