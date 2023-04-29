@@ -38,12 +38,11 @@ class ReceiverService extends BaseService
      * @param array $data
      * @return Model
      */
-    public function store(array $data = []): Model
+    public function store(array $data = []): bool
     {
         $receiver = $this->model->create($data);
-        $addresses = Arr::get($data, 'addresses');
-        $this->storeReceiverAddresses($receiver, addresses: $addresses);
-        return $receiver;
+        $this->storeReceiverAddresses($receiver, addresses: Arr::get($data, 'addresses'));
+        return true;
     }
 
     /**
@@ -53,13 +52,16 @@ class ReceiverService extends BaseService
      * @return Model
      * @throws NotFoundException
      */
-    public function update(int $id, array $data = []): Model
+    public function update(int $id, array $data = []): bool
     {
         $receiver = $this->findById($id);
         if (!$receiver)
             throw new NotFoundException(trans('lang.not_found'));
         $receiver->update($data);
-        return $receiver;
+        $receiver->deleteAddresses();
+        $this->storeReceiverAddresses(receiver: $receiver, addresses: Arr::get($data, 'addresses'));
+
+        return true;
     }
 
     /**
@@ -83,7 +85,7 @@ class ReceiverService extends BaseService
     {
         if (count($addresses))
             foreach ($addresses as $address) {
-                $receiver->updateAddress(Arr::wrap($address));
+                $receiver->storeAddress(Arr::wrap($address));
             }
     }
 }

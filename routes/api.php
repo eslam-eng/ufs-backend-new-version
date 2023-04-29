@@ -31,10 +31,10 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
         Route::post('set-fcm-token', [AuthController::class, 'setFcmToken']);
     });
 
-    Route::group(['prefix' => 'locations', function () {
+    Route::group(['prefix' => 'locations'], function () {
         Route::get('governorates', [LocationsController::class, 'getAllGovernorates']);
         Route::get('{parent_id}', [LocationsController::class, 'getLocationByParentId']);
-    }]);
+    });
 
     Route::resource('companies',CompanyController::class);
     Route::group(['prefix' => 'company'],function (){

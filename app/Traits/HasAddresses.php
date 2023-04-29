@@ -17,15 +17,6 @@ trait HasAddresses
         return $this->addresses()->create($data);
     }
 
-    public function updateAddress($data=[]): void
-    {
-        //todo update spacefic address with with id
-        $this->addresses->each(function ($address){
-            $address->delete();
-        });
-        $this->storeAddress($data);
-    }
-
     public function deleteAddresses()
     {
 

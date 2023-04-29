@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ReceiverStoreRequest;
 use App\Http\Requests\Api\ReceiverUpdateRequest;
@@ -47,6 +48,8 @@ class ReceiverController extends Controller
         try {
             $this->receiverService->update(data: $request->validated(), id: $id);
             return apiResponse(message: trans('lang.success_operation'));
+        } catch (NotFoundException $e) {
+            return apiResponse(message: $e->getMessage(), code: $e->getCode());
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_rong'), code: 422);
         }
@@ -61,6 +64,8 @@ class ReceiverController extends Controller
         try {
             $this->receiverService->destroy(id: $id);
             return apiResponse(message: trans('lang.success_operation'));
+        } catch (NotFoundException $e) {
+            return apiResponse(message: $e->getMessage(), code: 422);
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
         }
