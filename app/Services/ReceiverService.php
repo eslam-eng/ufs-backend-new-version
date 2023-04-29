@@ -3,11 +3,10 @@
 namespace App\Services;
 
 use App\Exceptions\NotFoundException;
-use App\Models\Address;
 use App\Models\Receiver;
 use App\QueryFilters\ReceiversFilters;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 class ReceiverService extends BaseService
@@ -19,16 +18,16 @@ class ReceiverService extends BaseService
 
     public function getModel(): Model
     {
-       return  $this->model ;
+        return $this->model;
     }
 
     //method for api with pagination
-    public function listing(array $filters = [],$withRelations = [],$perPage=10): \Illuminate\Contracts\Pagination\CursorPaginator
+    public function listing(array $filters = [], $withRelations = [], $perPage = 10): \Illuminate\Contracts\Pagination\CursorPaginator
     {
         return $this->receiverQueryBuilder(filters: $filters, withRelations: $withRelations)->cursorPaginate($perPage);
     }
 
-    public function receiverQueryBuilder(array $filters = [],array $withRelations = []): Builder
+    public function receiverQueryBuilder(array $filters = [], array $withRelations = []): Builder
     {
         $receivers = $this->getQuery()->with($withRelations);
         return $receivers->filter(new ReceiversFilters($filters));
@@ -42,8 +41,8 @@ class ReceiverService extends BaseService
     public function store(array $data = []): Model
     {
         $receiver = $this->model->create($data);
-        $addresses = Arr::get($data,'addresses');
-        $this->storeReceiverAddresses($receiver,addresses: $addresses);
+        $addresses = Arr::get($data, 'addresses');
+        $this->storeReceiverAddresses($receiver, addresses: $addresses);
         return $receiver;
     }
 
@@ -54,7 +53,7 @@ class ReceiverService extends BaseService
      * @return Model
      * @throws NotFoundException
      */
-    public function update(int $id ,array $data = []): Model
+    public function update(int $id, array $data = []): Model
     {
         $receiver = $this->findById($id);
         if (!$receiver)
@@ -80,11 +79,10 @@ class ReceiverService extends BaseService
     }
 
 
-    private function storeReceiverAddresses(Receiver $receiver , array $addresses = []): void
+    private function storeReceiverAddresses(Receiver $receiver, array $addresses = []): void
     {
         if (count($addresses))
-            foreach($addresses as $address)
-            {
+            foreach ($addresses as $address) {
                 $receiver->updateAddress(Arr::wrap($address));
             }
     }

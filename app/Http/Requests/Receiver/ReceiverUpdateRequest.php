@@ -24,7 +24,7 @@ class ReceiverUpdateRequest extends BaseRequest
         return [
             'name' => 'required|string',
             'phone' => 'required|numeric|unique:receivers,phone,' . $this->receiver,
-            'company_id' => 'required|integer|exists:companies,id',
+            'receiving_company' => 'nullable|string',
             'branch_id' => 'required|integer|exists:branches,id',
             'city_id' => 'required|integer|exists:locations,id',
             'area_id' => 'required|integer|exists:locations,id',

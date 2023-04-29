@@ -24,7 +24,7 @@ class ReceiverStoreRequest extends BaseRequest
         return [
             'name' => 'required|string',
             'phone' => 'required|numeric|unique:receivers,phone',
-            'company_id' => 'required|integer|exists:companies,id',
+            'receiving_company' => 'nullable|string',
             'branch_id' => 'required|numeric|exists:branches,id',
             'city_id' => 'required|numeric|exists:locations,id',
             'area_id' => 'required|numeric|exists:locations,id',
