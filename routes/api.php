@@ -40,9 +40,7 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::group(['prefix' => 'company'],function (){
         Route::get('{id}',[CompanyController::class,'getCompanyById']);
     });
+
+    Route::resource('receivers', ReceiverController::class);
+
 });
-
-
-
-
-Route::resource('receivers', ReceiverController::class);
