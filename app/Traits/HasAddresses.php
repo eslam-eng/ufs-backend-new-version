@@ -7,18 +7,19 @@ use Illuminate\Support\Arr;
 trait HasAddresses
 {
 
-    public function addresses()
+    public function addresses(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Address::class,'addressable');
     }
 
-    public function storeAddress($data=[])
+    public function storeAddress(array $data = [])
     {
         return $this->addresses()->create($data);
     }
 
-    public function updateAddress($data=[])
+    public function updateAddress($data=[]): void
     {
+        //todo update spacefic address with with id
         $this->addresses->each(function ($address){
             $address->delete();
         });

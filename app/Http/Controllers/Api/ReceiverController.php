@@ -12,8 +12,6 @@ use Illuminate\Http\Request;
 
 class ReceiverController extends Controller
 {
-    //['name', 'phone', 'company_name', 'branch_name', 'branch_id', 'city_id', 'area_id', 'reference', 'title', 'notes'];
-
     public function __construct(private ReceiverService $receiverService)
     {
 
@@ -22,48 +20,35 @@ class ReceiverController extends Controller
     /**
      * get all receivers
      */
-    public function index()
+    public function index(Request $request)
     {
-        try{
-            $filters       = [];
-            $withRelations = [];
-            $receivers = $this->receiverService->listing(whereConditions: $filters, withRelations: $withRelations);
+        try {
+            $filters = array_filter($request->all());
+            $withRelations = ['branch.company:id,name', 'city:id,title', 'area:id,title'];
+            $receivers = $this->receiverService->listing(filters: $filters, withRelations: $withRelations);
             return ReceiverResource::collection($receivers);
-        }catch(Exception $e){
-            return apiResponse(message: trans('lang.something_went_rong'), code: 422);
+        } catch (Exception $e) {
+            return apiResponse(message: trans('lang.something_went_wrong'), code: $e->getCode());
         }
     }
+
     public function store(ReceiverStoreRequest $request)
     {
-        try{
-
-            $receiver = $this->receiverService->store(data: $request->validated());
-            if(!$receiver)
-                return apiResponse(message: trans('lang.something_went_rong'), code: 422);
-            
-            return apiResponse(data: new ReceiverResource($receiver), message: trans('lang.success_operation'));
-        
-        }catch(Exception $e){
-
-            return apiResponse(message: trans('lang.something_went_rong'), code: 422);
-        
+        try {
+            $this->receiverService->store(data: $request->validated());
+            return apiResponse(message: trans('lang.success_operation'));
+        } catch (Exception $e) {
+            return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
         }
     }
 
     public function update(ReceiverUpdateRequest $request, int $id)
     {
-        try{
-
-            $receiver = $this->receiverService->update(data: $request->validated(), id: $id);
-            if(!$receiver)
-                return apiResponse(message: trans('lang.something_went_rong'), code: 422);
-            
-            return apiResponse(data: new ReceiverResource($receiver), message: trans('lang.success_operation'));
-        
-        }catch(Exception $e){
-
+        try {
+            $this->receiverService->update(data: $request->validated(), id: $id);
+            return apiResponse(message: trans('lang.success_operation'));
+        } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_rong'), code: 422);
-        
         }
     }
 
@@ -73,17 +58,11 @@ class ReceiverController extends Controller
      */
     public function destroy(int $id)
     {
-        try{
-
-            $status = $this->receiverService->destroy(id: $id);
-            if(!$status)
-                return apiResponse(message: trans('lang.soomething_went_rong'), code: 422);
+        try {
+            $this->receiverService->destroy(id: $id);
             return apiResponse(message: trans('lang.success_operation'));
-
-        }catch(Exception $e){
-
-            return apiResponse(message: trans('lang.soomething_went_rong'), code: 422);
-            
+        } catch (Exception $e) {
+            return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
         }
     }
 }

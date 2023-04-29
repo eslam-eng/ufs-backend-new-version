@@ -16,4 +16,14 @@ class Branch extends Model
         return $this->belongsTo(Company::class,'company_id');
     }
 
+    public function city()
+    {
+        return $this->belongsTo(Location::class,'city_id');
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(Location::class,'area_id');
+    }
+
 }

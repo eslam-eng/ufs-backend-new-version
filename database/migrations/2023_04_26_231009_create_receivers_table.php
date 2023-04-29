@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
-            $table->foreignIdFor(\App\Models\Company::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->text('receiving_company');
+            $table->string('phone');
             $table->foreignIdFor(\App\Models\Branch::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Location::class,'city_id')->cascadeOnUpdate()->constrained('locations')->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Location::class,'area_id')->cascadeOnUpdate()->constrained('locations')->cascadeOnDelete();

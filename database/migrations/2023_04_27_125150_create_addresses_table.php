@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->morphs('addressable');
+            $table->string('address');
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
             $table->string('map_url')->nullable();

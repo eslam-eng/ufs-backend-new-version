@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Address;
 use App\Models\Receiver;
 use App\QueryFilters\ReceiversFilters;
@@ -12,21 +13,25 @@ use Illuminate\Support\Arr;
 class ReceiverService extends BaseService
 {
 
-    public function __construct(private Receiver $model)
+    public function __construct(public Receiver $model)
     {
-        
+    }
+
+    public function getModel(): Model
+    {
+       return  $this->model ;
     }
 
     //method for api with pagination
-    public function listing(array $whereConditions = [],$withRelations = [],$perPage=10)
+    public function listing(array $filters = [],$withRelations = [],$perPage=10): \Illuminate\Contracts\Pagination\CursorPaginator
     {
-        return $this->receiverQueryBuilder(whereConditions: $whereConditions, withRelations: $withRelations)->cursorPaginate($perPage);
+        return $this->receiverQueryBuilder(filters: $filters, withRelations: $withRelations)->cursorPaginate($perPage);
     }
 
-    public function receiverQueryBuilder(array $whereConditions = [],array $withRelations = []): Builder
-    { 
-        $recevers = $this->model->query()->with($withRelations);
-        return $recevers->filter(new ReceiversFilters($whereConditions));
+    public function receiverQueryBuilder(array $filters = [],array $withRelations = []): Builder
+    {
+        $receivers = $this->getQuery()->with($withRelations);
+        return $receivers->filter(new ReceiversFilters($filters));
     }
 
     /**
@@ -37,11 +42,8 @@ class ReceiverService extends BaseService
     public function store(array $data = []): Model
     {
         $receiver = $this->model->create($data);
-        if(isset($data['addresses']))
-            foreach($data['addresses'] as $address)
-            {
-                $receiver->storeAddress(Arr::wrap($address));
-            }
+        $addresses = Arr::get($data,'addresses');
+        $this->storeReceiverAddresses($receiver,addresses: $addresses);
         return $receiver;
     }
 
@@ -50,16 +52,14 @@ class ReceiverService extends BaseService
      * @param array $data
      * @param int $id
      * @return Model
+     * @throws NotFoundException
      */
-    public function update(array $data = [], int $id): Model
+    public function update(int $id ,array $data = []): Model
     {
-        $receiver = $this->model->find($id);
+        $receiver = $this->findById($id);
+        if (!$receiver)
+            throw new NotFoundException(trans('lang.not_found'));
         $receiver->update($data);
-        if(isset($data['addresses']))
-            foreach($data['addresses'] as $address)
-            {
-                $receiver->updateAddress(Arr::wrap($address));
-            }
         return $receiver;
     }
 
@@ -67,12 +67,25 @@ class ReceiverService extends BaseService
      * delete existing receiver
      * @param int $id
      * @return bool
+     * @throws NotFoundException
      */
     public function destroy(int $id): bool
     {
-        $receiver = $this->model->find($id);
+        $receiver = $this->findById($id);
+        if (!$receiver)
+            throw new NotFoundException(trans('lang.not_found'));
         $receiver->delete();
         $receiver->deleteAddresses();
         return true;
+    }
+
+
+    private function storeReceiverAddresses(Receiver $receiver , array $addresses = []): void
+    {
+        if (count($addresses))
+            foreach($addresses as $address)
+            {
+                $receiver->updateAddress(Arr::wrap($address));
+            }
     }
 }

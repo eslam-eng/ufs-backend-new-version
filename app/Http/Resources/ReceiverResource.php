@@ -15,16 +15,17 @@ class ReceiverResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'           => $this->id,
-            'name'         => $this->name,
-            'phone'        => $this->phone,
+            'id' => $this->id,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'receiving_company' => $this->receiving_company,
             'company_name' => $this->company_name,
-            'branch_name'  => $this->branch_name,
-            'city_name'    => $this->branch_name,
-            'area_name'    => $this->area_name,
-            'reference'    => $this->reference,
-            'title'        => $this->title,
-            'notes'        => $this->notes,
+            'branch_name' => $this->branch_name,
+            'city_name' => $this->city_name,
+            'area_name' => $this->area_name,
+            'reference' => $this->reference,
+            'title' => $this->title,
+            'address' => $this->address_name
         ];
     }
 }
