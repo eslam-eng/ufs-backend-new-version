@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Receiver;
 
 use App\Http\Requests\BaseRequest;
 
@@ -32,7 +32,8 @@ class ReceiverStoreRequest extends BaseRequest
             'title' => 'nullable|string',
             'notes' => 'nullable|string',
             'addresses' => 'required|array',
-            'addresses.*' => 'required|array',
+            'addresses.*' => 'required|string',
+
         ];
     }
 }

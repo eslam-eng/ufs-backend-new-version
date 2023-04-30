@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('ceo')->nullable();
             $table->string('phone');
             $table->boolean('show_dashboard')->default(\App\Enums\ActivationStatus::INACTIVE->value);
+            $table->string('commercial_number')->nullable();
             $table->string('notes')->nullable();
             $table->boolean('status')->default(\App\Enums\ActivationStatus::ACTIVE->value);
             $table->timestamps();

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Location;
 use App\QueryFilters\LocationsFilter;
+use Illuminate\Database\Eloquent\Model;
 
 class LocationsService extends BaseService
 {
@@ -12,16 +13,20 @@ class LocationsService extends BaseService
     {
     }
 
-    public function queryGet(array $filter = [])
+    public function getModel(): Model
     {
-        $result = $this->model->query();
-        return $result->filter(new LocationsFilter($filter));
+        return $this->model;
+    }
+
+    public function locationQueryBuilder(array $filter = [])
+    {
+        return $this->getQuery()->filter(new LocationsFilter($filter));
     }
 
 
     public function getAll(array $filters = [])
     {
-        return $this->queryGet($filters)->get();
+        return $this->locationQueryBuilder($filters)->get();
     }
 
     public function getLocationAncestors($id)

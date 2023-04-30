@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Traits;
+use App\Enums\AttachmentsType;
 use App\Models\Attachment;
-use App\Enum\ImageTypeEnum;
 trait HasAttachment
 {
 
@@ -17,7 +17,7 @@ trait HasAttachment
 
     public function updateAttachment($data=[])
     {
-        $this->attachments->where('type', ImageTypeEnum::GALARY)->each(function ($attachment){
+        $this->attachments->where('type', AttachmentsType::ATTACHMENT->value)->each(function ($attachment){
                 $attachment->delete();
         });
         $this->storeAttachment($data);
@@ -31,15 +31,4 @@ trait HasAttachment
            $attachment->delete();
         });
     }
-
-    public function deleteAttachmentsLogo()
-    {
-
-        $this->attachments()->where('type', ImageTypeEnum::LOGO)->each(function ($attachment){
-            unlink(public_path($attachment->path."/".$attachment->filename));
-           $attachment->delete();
-        });
-    }
-
-
 }

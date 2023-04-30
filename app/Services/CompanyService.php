@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Company;
 use App\QueryFilters\LocationsFilter;
+use Illuminate\Database\Eloquent\Model;
 
 class CompanyService extends BaseService
 {
@@ -11,27 +12,48 @@ class CompanyService extends BaseService
     public function __construct(public Company $model)
     {
     }
-
-    public function queryGet(array $filter = [],array $withRelations = [])
+    public function getModel(): Model
     {
-        $result = $this->model->query()->with($withRelations);
-        return $result->filter(new LocationsFilter($filter));
+        return $this->model ;
+    }
+
+    public function companyQueryBuilder(array $filters = [],array $withRelations = [],$withCountRelations = [])
+    {
+        $result = $this->getQuery()->with($withRelations)->withCount($withCountRelations);
+        return $result->filter(new LocationsFilter($filters));
+    }
+
+    public function listing(array $filters , array $withRelations = [],array $withCountRelations = [],$perPage = 10)
+    {
+        return $this->companyQueryBuilder(filters: $filters,withRelations: $withRelations,withCountRelations: $withCountRelations)->cursorPaginate($perPage);
     }
 
 
-    public function getAll(array $filters = [])
+    public function getAll(array $filters = [],$withRelations = [])
     {
-        return $this->queryGet($filters)->get();
+        return $this->companyQueryBuilder(filters: $filters,withRelations: $withRelations)->get();
     }
 
-    public function getLocationAncestors($id)
+    public function store(array $data = [])
     {
-        return $this->model->defaultOrder()->ancestorsAndSelf($id);
+        //store basic company information
+
+
     }
 
-    public function getLocationDescendants($location_id)
+
+    public function status($id): bool
     {
-        return $this->model->defaultOrder()->descendantsOf($location_id);
-    }
+        $company = $this->findById($id);
+        $company->status = !$company->status;
+        return $company->save();
+    }//end of status
+
+    public function toggleShowDashboard($id): bool
+    {
+        $company = $this->findById($id);
+        $company->show_dashboard = !$company->show_dashboard;
+        return $company->save();
+    }//end of status
 
 }
