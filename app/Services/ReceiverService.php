@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ActivationStatus;
 use App\Exceptions\NotFoundException;
 use App\Models\Receiver;
 use App\QueryFilters\ReceiversFilters;
@@ -58,9 +59,6 @@ class ReceiverService extends BaseService
         if (!$receiver)
             throw new NotFoundException(trans('lang.not_found'));
         $receiver->update($data);
-        $receiver->deleteAddresses();
-        $this->storeReceiverAddresses(receiver: $receiver, addresses: Arr::get($data, 'addresses'));
-
         return true;
     }
 
@@ -83,9 +81,7 @@ class ReceiverService extends BaseService
 
     private function storeReceiverAddresses(Receiver $receiver, array $addresses = []): void
     {
-        if (count($addresses))
-            foreach ($addresses as $address) {
-                $receiver->storeAddress(Arr::wrap($address));
-            }
+        $addresses['is_default'] = ActivationStatus::ACTIVE();
+        $receiver->storeAddress(Arr::wrap($addresses));
     }
 }

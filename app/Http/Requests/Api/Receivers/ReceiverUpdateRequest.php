@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\Receivers;
 
 use App\Http\Requests\BaseRequest;
 
@@ -31,8 +31,6 @@ class ReceiverUpdateRequest extends BaseRequest
             'reference' => 'nullable|string|unique:receivers,reference,' . $this->receiver,
             'title' => 'nullable|string',
             'notes' => 'nullable|string',
-            'addresses' => 'required|array',
-            'addresses.*' => 'required|array',
         ];
     }
 }

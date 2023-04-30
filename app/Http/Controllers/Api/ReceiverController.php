@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ReceiverStoreRequest;
-use App\Http\Requests\Api\ReceiverUpdateRequest;
+use App\Http\Requests\Api\Receivers\ReceiverStoreRequest;
+use App\Http\Requests\Api\Receivers\ReceiverUpdateRequest;
 use App\Http\Resources\ReceiverResource;
 use App\Services\ReceiverService;
 use Exception;
@@ -25,7 +25,7 @@ class ReceiverController extends Controller
     {
         try {
             $filters = array_filter($request->all());
-            $withRelations = ['branch.company:id,name', 'city:id,title', 'area:id,title'];
+            $withRelations = ['branch.company:id,name', 'city:id,title', 'area:id,title','defaultAddress'];
             $receivers = $this->receiverService->listing(filters: $filters, withRelations: $withRelations);
             return ReceiverResource::collection($receivers);
         } catch (Exception $e) {
