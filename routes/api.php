@@ -41,6 +41,6 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
         Route::get('{id}',[CompanyController::class,'getCompanyById']);
     });
 
-    Route::resource('receivers', ReceiverController::class);
+    Route::apiResource('receivers', ReceiverController::class);
 
 });

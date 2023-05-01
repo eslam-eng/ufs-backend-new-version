@@ -17,13 +17,14 @@ trait HasAddresses
         return $this->addresses()->create($data);
     }
 
-    public function deleteAddresses()
+    public function deleteAddresses(): int
     {
+        return $this->addresses()->delete();
+    }
 
-        $this->addresses()->each(function ($address){
-           $address->delete();
-        });
-
+    public function updateAddress(array $data = []): int
+    {
+       return $this->addresses()->update($data);
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Receivers;
 
+use App\DTO\Receiver\ReceiverDTO;
 use App\Http\Requests\BaseRequest;
 
 class ReceiverStoreRequest extends BaseRequest
@@ -26,13 +27,29 @@ class ReceiverStoreRequest extends BaseRequest
             'phone' => 'required|numeric|unique:receivers,phone',
             'receiving_company' => 'nullable|string',
             'branch_id' => 'required|numeric|exists:branches,id',
-            'city_id' => 'required|numeric|exists:locations,id',
-            'area_id' => 'required|numeric|exists:locations,id',
+            'city_id' => 'required|integer|exists:locations,id',
+            'area_id' => 'required|integer|exists:locations,id',
             'reference' => 'nullable|string|unique:receivers,reference',
             'title' => 'nullable|string',
             'notes' => 'nullable|string',
-            'addresses' => 'required|array',
-            'addresses.*' => 'required',
+            'address' => 'required|string',
+            'lat' => 'string|nullable',
+            'lng' => 'string|nullable',
+            'postal_code' => 'string|nullable',
+            'map_url' => 'string|nullable',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'is_default' => true,
+        ]);
+
+    }
+
+    public function toReceiverDTO(): \App\DTO\BaseDTO
+    {
+        return ReceiverDTO::fromRequest($this);
     }
 }

@@ -13,7 +13,8 @@ class Receiver extends Model
 {
     use HasFactory, HasAddresses, Filterable;
 
-    protected $fillable = ['name', 'phone', 'receiving_company', 'branch_id', 'city_id', 'area_id', 'reference', 'title', 'notes'];
+    protected $guarded = 'id';
+    protected $fillable = ['name', 'phone', 'receiving_company', 'branch_id', 'reference', 'title', 'notes'];
 
     public function defaultAddress(): MorphOne
     {
@@ -25,15 +26,6 @@ class Receiver extends Model
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-    public function city(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Location::class, 'city_id');
-    }
-
-    public function area(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Location::class, 'area_id');
-    }
 
     public function getCompanyNameAttribute()
     {
@@ -47,12 +39,12 @@ class Receiver extends Model
 
     public function getAreaNameAttribute()
     {
-        return $this->relationLoaded('area') && isset($this->area) ? $this->area->title : null;
+        return $this->relationLoaded('defaultAddress') && $this->defaultAddress->relationLoaded('area') ? $this->defaultAddress->area->title : null;
     }
 
     public function getCityNameAttribute()
     {
-        return $this->relationLoaded('city') && isset($this->city) ? $this->city->title : null;
+        return $this->relationLoaded('defaultAddress') && $this->defaultAddress->relationLoaded('city') ? $this->defaultAddress->city->title : null;
     }
 
     public function getAddressNameAttribute()
