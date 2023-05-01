@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UsersType;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Receivers\ReceiverStoreRequest;
@@ -26,6 +27,9 @@ class ReceiverController extends Controller
     {
         try {
             $filters = array_filter($request->all());
+            $auth_user = getAuthUser();
+            if ($auth_user->type != UsersType::SUPERADMIN())
+                $filters['company_id'] = $auth_user->company_id;
             $withRelations = ['branch.company:id,name','defaultAddress'=>fn($query)=>$query->with(['city','area'])];
             $receivers = $this->receiverService->listing(filters: $filters, withRelations: $withRelations);
             return ReceiverResource::collection($receivers);
