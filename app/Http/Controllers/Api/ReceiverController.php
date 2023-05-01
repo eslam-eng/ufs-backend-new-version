@@ -10,6 +10,7 @@ use App\Http\Resources\ReceiverResource;
 use App\Services\ReceiverService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReceiverController extends Controller
 {
@@ -25,7 +26,7 @@ class ReceiverController extends Controller
     {
         try {
             $filters = array_filter($request->all());
-            $withRelations = ['branch.company:id,name', 'city:id,title', 'area:id,title','defaultAddress'];
+            $withRelations = ['branch.company:id,name','defaultAddress'=>fn($query)=>$query->with(['city','area'])];
             $receivers = $this->receiverService->listing(filters: $filters, withRelations: $withRelations);
             return ReceiverResource::collection($receivers);
         } catch (Exception $e) {
@@ -36,7 +37,10 @@ class ReceiverController extends Controller
     public function store(ReceiverStoreRequest $request)
     {
         try {
-            $this->receiverService->store(data: $request->validated());
+            DB::beginTransaction();
+                $receiverDto = $request->toReceiverDTO();
+                $this->receiverService->store($receiverDto);
+            DB::commit();
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
@@ -46,7 +50,8 @@ class ReceiverController extends Controller
     public function update(ReceiverUpdateRequest $request, int $id)
     {
         try {
-            $this->receiverService->update(id: $id, data: $request->validated());
+            $receiverDTO = $request->toReceiverDTO();
+            $this->receiverService->update($id, $receiverDTO);
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception|NotFoundException $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);

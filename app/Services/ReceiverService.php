@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\Receiver\ReceiverDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Receiver;
 use App\QueryFilters\ReceiversFilters;
@@ -22,7 +23,7 @@ class ReceiverService extends BaseService
     }
 
     //method for api with pagination
-    public function listing(array $filters = [], $withRelations = [], $perPage = 10): \Illuminate\Contracts\Pagination\CursorPaginator
+    public function listing(array $filters = [], array $withRelations = [], $perPage = 10): \Illuminate\Contracts\Pagination\CursorPaginator
     {
         return $this->receiverQueryBuilder(filters: $filters, withRelations: $withRelations)->cursorPaginate($perPage);
     }
@@ -38,11 +39,10 @@ class ReceiverService extends BaseService
      * @param array $data
      * @return bool
      */
-    public function store(array $data = []): bool
+    public function store(ReceiverDTO $receiverDTO): bool
     {
-        $receiver = $this->model->create($data);
-        $address_data = Arr::only($data, ['address','lat', 'lng', 'postal_code', 'map_url', 'is_default']);
-        $this->storeReceiverAddresses($receiver, address_data: $address_data);
+        $receiver = $this->model->create($receiverDTO->receiverData());
+        $receiver->storeAddress($receiverDTO->addressData());
         return true;
     }
 
@@ -53,12 +53,12 @@ class ReceiverService extends BaseService
      * @return bool
      * @throws NotFoundException
      */
-    public function update(int $id, array $data = []): bool
+    public function update(int $id, ReceiverDTO $receiverDTO): bool
     {
         $receiver = $this->findById($id);
         if (!$receiver)
             throw new NotFoundException(trans('lang.not_found'));
-        $receiver->update($data);
+        $receiver->update($receiverDTO->receiverData());
         return true;
     }
 
@@ -78,10 +78,4 @@ class ReceiverService extends BaseService
         return true;
     }
 
-
-    private function storeReceiverAddresses(Receiver $receiver, array $address_data = []): void
-    {
-        $address_data['is_default'] = isset($address_data['is_default']) ?? false;
-        $receiver->storeAddress($address_data);
-    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Receivers;
 
+use App\DTO\Receiver\ReceiverDTO;
 use App\Http\Requests\BaseRequest;
 
 class ReceiverUpdateRequest extends BaseRequest
@@ -26,11 +27,14 @@ class ReceiverUpdateRequest extends BaseRequest
             'phone' => 'required|numeric|unique:receivers,phone,' . $this->receiver,
             'receiving_company' => 'nullable|string',
             'branch_id' => 'required|integer|exists:branches,id',
-            'city_id' => 'required|integer|exists:locations,id',
-            'area_id' => 'required|integer|exists:locations,id',
             'reference' => 'nullable|string|unique:receivers,reference,' . $this->receiver,
             'title' => 'nullable|string',
             'notes' => 'nullable|string',
         ];
+    }
+
+    public function toReceiverDTO(): \App\DTO\BaseDTO|ReceiverDTO
+    {
+        return ReceiverDTO::fromArray($this->all());
     }
 }

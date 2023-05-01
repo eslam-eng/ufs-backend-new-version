@@ -15,4 +15,15 @@ class Address extends Model
     {
         return $this->morphTo();
     }
+
+    public function city(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Location::class,'city_id');
+    }
+
+
+    public function area(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Location::class,'area_id');
+    }
 }
