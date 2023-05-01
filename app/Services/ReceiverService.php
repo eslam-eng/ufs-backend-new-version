@@ -8,7 +8,6 @@ use App\Models\Receiver;
 use App\QueryFilters\ReceiversFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 
 class ReceiverService extends BaseService
 {
