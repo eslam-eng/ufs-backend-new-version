@@ -46,12 +46,10 @@ class ReceiverController extends Controller
     public function update(ReceiverUpdateRequest $request, int $id)
     {
         try {
-            $this->receiverService->update(data: $request->validated(), id: $id);
+            $this->receiverService->update(id: $id, data: $request->validated());
             return apiResponse(message: trans('lang.success_operation'));
-        } catch (NotFoundException $e) {
-            return apiResponse(message: $e->getMessage(), code: $e->getCode());
-        } catch (Exception $e) {
-            return apiResponse(message: trans('lang.something_went_rong'), code: 422);
+        } catch (Exception|NotFoundException $e) {
+            return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
         }
     }
 

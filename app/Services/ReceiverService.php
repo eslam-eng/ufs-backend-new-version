@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\ActivationStatus;
 use App\Exceptions\NotFoundException;
 use App\Models\Receiver;
 use App\QueryFilters\ReceiversFilters;
@@ -42,7 +41,8 @@ class ReceiverService extends BaseService
     public function store(array $data = []): bool
     {
         $receiver = $this->model->create($data);
-        $this->storeReceiverAddresses($receiver, addresses: Arr::get($data, 'addresses'));
+        $address_data = Arr::only($data, ['address','lat', 'lng', 'postal_code', 'map_url', 'is_default']);
+        $this->storeReceiverAddresses($receiver, address_data: $address_data);
         return true;
     }
 
@@ -79,9 +79,9 @@ class ReceiverService extends BaseService
     }
 
 
-    private function storeReceiverAddresses(Receiver $receiver, array $addresses = []): void
+    private function storeReceiverAddresses(Receiver $receiver, array $address_data = []): void
     {
-        $addresses['is_default'] = ActivationStatus::ACTIVE();
-        $receiver->storeAddress(Arr::wrap($addresses));
+        $address_data['is_default'] = isset($address_data['is_default']) ?? false;
+        $receiver->storeAddress($address_data);
     }
 }
