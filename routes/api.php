@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PhoneVerifyController;
 use App\Http\Controllers\Api\ReceiverController;
@@ -41,6 +42,8 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
         Route::get('{id}',[CompanyController::class,'getCompanyById']);
     });
 
-    Route::apiResource('receivers', ReceiverController::class);
 
 });
+Route::apiResource('receivers', ReceiverController::class);
+
+Route::resource('addresses', AddressController::class);

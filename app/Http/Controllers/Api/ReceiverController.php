@@ -36,15 +36,15 @@ class ReceiverController extends Controller
 
     public function store(ReceiverStoreRequest $request)
     {
-        try {
+        // try {
             DB::beginTransaction();
                 $receiverDto = $request->toReceiverDTO();
                 $this->receiverService->store($receiverDto);
             DB::commit();
             return apiResponse(message: trans('lang.success_operation'));
-        } catch (Exception $e) {
-            return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
-        }
+        // } catch (Exception $e) {
+        //     return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
+        // }
     }
 
     public function update(ReceiverUpdateRequest $request, int $id)
