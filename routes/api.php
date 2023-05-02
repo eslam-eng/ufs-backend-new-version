@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ReceiverController;
 use App\Http\Controllers\Api\RestPasswordController;
 use App\Http\Controllers\Api\LocationsController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\DepartmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +45,8 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
 
     Route::apiResource('receivers', ReceiverController::class);
 
+    Route::apiResource('branches', BranchController::class);
+    Route::apiResource('departments', DepartmentController::class);
+
 });
 
-Route::apiResource('branches', BranchController::class);
