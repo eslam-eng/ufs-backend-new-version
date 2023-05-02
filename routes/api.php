@@ -45,9 +45,10 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     });
 
 
+    Route::resource('receivers', ReceiverController::class);
+
+    Route::resource('addresses', AddressController::class);
+
+    Route::apiResource('branches', BranchController::class);
+
 });
-Route::resource('receivers', ReceiverController::class);
-
-Route::resource('addresses', AddressController::class);
-
-Route::apiResource('branches', BranchController::class);
