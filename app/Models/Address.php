@@ -36,15 +36,4 @@ class Address extends Model
     {
         return $this->relationLoaded('city') && isset($this->city) ? $this->city->title : null;
     }
-
-    public function getAreaNameAttribute()
-    {
-        return $this->relationLoaded('area') ? $this->area->title : null;
-    }
-
-    public function getCityNameAttribute()
-    {
-        return $this->relationLoaded('city') ? $this->city->title : null;
-    }
-
 }
