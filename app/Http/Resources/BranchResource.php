@@ -19,9 +19,12 @@ class BranchResource extends JsonResource
             'name' => $this->name,
             'phone' => $this->phone,
             'company_name' => $this->company_name,
-            'city_name' => $this->defaultAddress->city_name,
-            'area_name' => $this->defaultAddress->area_name,
-            'address' => $this->defaultAddress->address
+            'company_id' => $this->company->id,
+            'city_name' => $this->addresses->city_name,
+            'city_id' => $this->addresses->city->id,
+            'area_name' => $this->addresses->area_name,
+            'area_id' => $this->addresses->area->id,
+            'address' => $this->addresses->address
         ];
     }
 }

@@ -9,21 +9,25 @@ class BranchDTO extends BaseDTO
 {
 
     /**
-     * @param int $morphable_id
-     * @param int $buyer_time_type
-     * @param int $day
-     * @param int $time_from
-     * @param int $time_to
-     * @param string $morphable_type
+     * @param string $name
+     * @param string $phone
+     * @param int $company_id
+     * @param int|null $city_id
+     * @param int|null $area_id
+     * @param string|null $address
+     * @param string|null $lat
+     * @param string|null $lng
+     * @param string|null $postal_code
+     * @param string|null $map_url
+     * @param bool|null $is_default
      */
-
     public function __construct(
         protected string $name,
         protected string $phone,
         protected int    $company_id,
-        protected ?int   $city_id,
-        protected ?int   $area_id,
-        protected ?string $address,
+        protected int   $city_id,
+        protected int   $area_id,
+        protected string $address,
         protected ?string $lat,
         protected ?string $lng,
         protected ?string $postal_code,
@@ -81,7 +85,6 @@ class BranchDTO extends BaseDTO
             "name" => $this->name,
             "phone" => $this->phone,
             "company_id" => $this->company_id,
-
             'city_id' => $this->city_id,
             'area_id' => $this->area_id,
             'address' => $this->address,
@@ -97,7 +100,6 @@ class BranchDTO extends BaseDTO
     public function addressData(): array
     {
         return [
-
             'city_id' => $this->city_id,
             'area_id' => $this->area_id,
             'address' => $this->address,

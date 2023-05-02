@@ -58,6 +58,7 @@ class BranchService extends BaseService
         if (!$branch)
             throw new NotFoundException(trans('lang.not_found'));
         $branch->update($branchDTO->branchData());
+        $branch->storeAddress($branchDTO->addressData());
         return true;
     }
 
