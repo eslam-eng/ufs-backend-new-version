@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\DTO\Address\AddressDTO;
+use App\Enums\AddressTypes;
+use App\Exceptions\GeneralException;
 use App\Exceptions\NotFoundException;
 use App\Models\Address;
 use App\Models\Branch;
 use App\Models\Company;
-use App\Models\Department;
 use App\Models\Receiver;
 use App\QueryFilters\AddressesFilters;
 use Illuminate\Database\Eloquent\Builder;
@@ -43,18 +44,23 @@ class AddressService extends BaseService
      * @param array $data
      * @return bool
      */
-    public function store(AddressDTO $addressDto): bool
+    public function store(AddressDTO $addressDTO): bool
     {
-        $model = match ((int)$addressDto['addressable_type']) {
-            Address::RECEIVER   => Receiver::find($addressDto['addressable_id']),
-            Address::COMPANY    => Company::find($addressDto['addressable_id']),
-            Address::BRANCH     => Branch::find($addressDto['addressable_id']),
-            Address::DEPARTMENT => Department::find($addressDto['addressable_id']),
+        $model = match ($addressDTO->addressable_type) {
+            AddressTypes::RECEIVER->value => Receiver::find($addressDTO->addressable_id),
+            AddressTypes::COMPANY->value => Company::find($addressDTO->addressable_id),
+            AddressTypes::BRANCH->value => Branch::find($addressDTO->addressable_id),
+            default => throw new \Exception('Unexpected match value'),
         };
-        if (isset($model))
-            $model->storeAddress($addressDto->addressData());    
+
+        if (isset($model)) {
+            if ($addressDTO->is_default)
+                $model->addresses()->update(['is_default' => false]);
+            $model->storeAddress(Arr::except($addressDTO->toArray(), ['addressable_type', 'addressable_id']));
+        }
         return true;
     }
+
 
     /**
      * update existing address
@@ -63,20 +69,15 @@ class AddressService extends BaseService
      * @return bool
      * @throws NotFoundException
      */
-    public function update(int $id, array $data = []): bool
+    public function update(int $id, AddressDTO $addressDTO): bool
     {
-        $address = $this->getModel()->find($id);
+        $address = $this->findById(id: $id);
         if (!$address)
             throw new NotFoundException(trans('lang.not_found'));
-        $model = match ((int)$data['addressable_type']) {
-            Address::RECEIVER   => Receiver::find($data['addressable_id']),
-            Address::COMPANY    => Company::find($data['addressable_id']),
-            Address::BRANCH     => Branch::find($data['addressable_id']),
-            Address::DEPARTMENT => Department::find($data['addressable_id']),
-        };
-        if (isset($model))
-            $model->updateAddress(Arr::except($data, ['addressable_type', 'addressable_id']), $id);
-        return true;
+
+        if ($addressDTO->is_default)
+            $this->getQuery()->where('addressable_id', $address->addressable_id)->where('addressable_type', $address->addressable_type)->update(['is_default' => false]);
+        return $address->update(Arr::except($addressDTO->toArray(), ['addressable_type', 'addressable_id']));
     }
 
     /**
@@ -84,13 +85,19 @@ class AddressService extends BaseService
      * @param int $id
      * @return bool
      * @throws NotFoundException
+     * @throws GeneralException
      */
     public function destroy(int $id): bool
     {
-        $address = $this->getModel()->find($id);
+        $address = $this->findById(id: $id);
+        //get_addresses_count
+        $addresses_count = $this->getQuery()->where('addressable_id', $address->addressable_id)->where('addressable_type', $address->addressable_type)->count();
         if (!$address)
             throw new NotFoundException(trans('lang.not_found'));
-        $address->delete();
+        if ($addresses_count <= 1)
+            throw new GeneralException(trans('lang.cannot_delete_address'));
+        if ($address->is_default)
+            throw new GeneralException(trans('lang.set_another_default_address_before_deleting'));
         return true;
     }
 

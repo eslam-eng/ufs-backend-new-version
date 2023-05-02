@@ -18,14 +18,13 @@ class Receiver extends Model
 
     public function defaultAddress(): MorphOne
     {
-        return $this->MorphOne(Address::class, 'addressable')->where('is_default', ActivationStatus::ACTIVE());
+        return $this->MorphOne(Address::class, 'addressable')->where('is_default', ActivationStatus::ACTIVE())->with('city','area');
     }
 
     public function branch(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
-
 
     public function getCompanyNameAttribute()
     {
@@ -35,16 +34,6 @@ class Receiver extends Model
     public function getBranchNameAttribute()
     {
         return $this->relationLoaded('branch') && isset($this->branch) ? $this->branch->name : null;
-    }
-
-    public function getAreaNameAttribute()
-    {
-        return $this->relationLoaded('defaultAddress') && $this->defaultAddress->relationLoaded('area') ? $this->defaultAddress->area->title : null;
-    }
-
-    public function getCityNameAttribute()
-    {
-        return $this->relationLoaded('defaultAddress') && $this->defaultAddress->relationLoaded('city') ? $this->defaultAddress->city->title : null;
     }
 
     public function getAddressNameAttribute()

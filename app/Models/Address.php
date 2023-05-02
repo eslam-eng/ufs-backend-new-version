@@ -10,14 +10,6 @@ class Address extends Model
 {
     use HasFactory, Filterable;
 
-    const RECEIVER   = 1;
-    const COMPANY    = 2;
-    const BRANCH     = 3;
-    const DEPARTMENT = 4;
-    const RATABLE_TAYPES = [
-        self::RECEIVER,self::COMPANY,self::BRANCH,self::DEPARTMENT,
-    ];
-
     protected $fillable = ['addressable_type','addressable_id' , 'lat','lng','address','map_url','city_id','area_id','postal_code','is_default'];
 
     public function addressable(): \Illuminate\Database\Eloquent\Relations\MorphTo

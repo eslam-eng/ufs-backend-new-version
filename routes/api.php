@@ -33,7 +33,8 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     });
 
     Route::group(['prefix' => 'locations'], function () {
-        Route::get('governorates', [LocationsController::class, 'getAllGovernorates']);
+        Route::get('cities', [LocationsController::class, 'getAllCities']);
+        Route::get('areas', [LocationsController::class, 'getAllAreas']);
         Route::get('{parent_id}', [LocationsController::class, 'getLocationByParentId']);
     });
 
@@ -44,6 +45,6 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
 
 
 });
-Route::apiResource('receivers', ReceiverController::class);
+Route::resource('receivers', ReceiverController::class);
 
 Route::resource('addresses', AddressController::class);

@@ -22,16 +22,16 @@ class AddressDTO extends BaseDTO
      */
 
     public function __construct(
-        protected int $addressable_type,
-        protected int $addressable_id,
-        protected string $lat,
-        protected string $lng,
-        protected string $address,
-        protected string $map_url,
-        protected int $city_id,
-        protected int $area_id,
-        protected string $postal_code,
-        protected bool $is_default,
+        public ?int $addressable_type,
+        public ?int $addressable_id,
+        public ?string $lat,
+        public ?string $lng,
+        public string $address,
+        public ?string $map_url,
+        public int $city_id,
+        public int $area_id,
+        public ?string $postal_code,
+        public ?bool $is_default = true,
     )
     {
     }
@@ -69,7 +69,7 @@ class AddressDTO extends BaseDTO
             city_id:Arr::get($data,'city_id'),
             area_id: Arr::get($data,'area_id'),
             postal_code: Arr::get($data,'postal_code'),
-            is_default: Arr::get($data,'is_default'),
+            is_default: Arr::get($data,'is_default',true),
         );
     }
 
@@ -90,20 +90,6 @@ class AddressDTO extends BaseDTO
             'map_url' => $this->map_url,
             'is_default' => $this->is_default
 
-        ];
-    }
-
-    public function addressData(): array
-    {
-        return [
-            'city_id' => $this->city_id,
-            'area_id' => $this->area_id,
-            'address' => $this->address,
-            'lat' => $this->lat,
-            'lng' => $this->lng,
-            'postal_code' => $this->postal_code,
-            'map_url' => $this->map_url,
-            'is_default' => $this->is_default
         ];
     }
 
