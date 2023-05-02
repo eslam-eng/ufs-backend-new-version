@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\PhoneVerifyController;
 use App\Http\Controllers\Api\ReceiverController;
 use App\Http\Controllers\Api\RestPasswordController;
@@ -44,7 +45,10 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     });
 
 
-});
-Route::resource('receivers', ReceiverController::class);
+    Route::resource('receivers', ReceiverController::class);
 
-Route::resource('addresses', AddressController::class);
+    Route::resource('addresses', AddressController::class);
+
+    Route::resource('branches', BranchController::class);
+
+});

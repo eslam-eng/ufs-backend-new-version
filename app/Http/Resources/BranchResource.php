@@ -14,6 +14,17 @@ class BranchResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'company_name' => $this->company_name,
+            'company_id' => $this->company->id,
+            'city_name' => $this->addresses->city_name,
+            'city_id' => $this->addresses->city->id,
+            'area_name' => $this->addresses->area_name,
+            'area_id' => $this->addresses->area->id,
+            'address' => $this->addresses->address
+        ];
     }
 }
