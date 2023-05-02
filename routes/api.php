@@ -49,6 +49,6 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
 
     Route::resource('addresses', AddressController::class);
 
-    Route::apiResource('branches', BranchController::class);
+    Route::resource('branches', BranchController::class);
 
 });
