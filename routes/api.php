@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\PhoneVerifyController;
@@ -33,7 +34,8 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     });
 
     Route::group(['prefix' => 'locations'], function () {
-        Route::get('governorates', [LocationsController::class, 'getAllGovernorates']);
+        Route::get('cities', [LocationsController::class, 'getAllCities']);
+        Route::get('areas', [LocationsController::class, 'getAllAreas']);
         Route::get('{parent_id}', [LocationsController::class, 'getLocationByParentId']);
     });
 
@@ -42,8 +44,10 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
         Route::get('{id}',[CompanyController::class,'getCompanyById']);
     });
 
-    Route::apiResource('receivers', ReceiverController::class);
 
 });
+Route::resource('receivers', ReceiverController::class);
+
+Route::resource('addresses', AddressController::class);
 
 Route::apiResource('branches', BranchController::class);

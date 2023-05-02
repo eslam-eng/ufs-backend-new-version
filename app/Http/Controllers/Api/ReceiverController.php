@@ -6,7 +6,8 @@ use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Receivers\ReceiverStoreRequest;
 use App\Http\Requests\Api\Receivers\ReceiverUpdateRequest;
-use App\Http\Resources\ReceiverResource;
+use App\Http\Resources\Receiver\ReceiverEditResource;
+use App\Http\Resources\Receiver\ReceiverResource;
 use App\Services\ReceiverService;
 use Exception;
 use Illuminate\Http\Request;
@@ -26,11 +27,37 @@ class ReceiverController extends Controller
     {
         try {
             $filters = array_filter($request->all());
-            $withRelations = ['branch.company:id,name','defaultAddress'=>fn($query)=>$query->with(['city','area'])];
+            $withRelations = ['branch.company:id,name','defaultAddress'];
             $receivers = $this->receiverService->listing(filters: $filters, withRelations: $withRelations);
             return ReceiverResource::collection($receivers);
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: $e->getCode());
+        }
+    }
+
+//    public function show(int $id)
+//    {
+//        try {
+//            $withRelations = ['branch.company:id,name','addresses'=>fn($query)=>$query->with(['city','area'])];
+//            $receiver = $this->receiverService->findById(id: $id, withRelations: $withRelations);
+//            return ReceiverEditResource::make($receiver);
+//
+//        }catch (Exception|NotFoundException $exception)
+//        {
+//            return apiResponse(message: $exception->getMessage(),code: 404);
+//        }
+//    }
+
+
+    public function edit(int $id)
+    {
+        try {
+            $withRelations = ['branch.company:id,name','addresses'=>fn($query)=>$query->with(['city','area'])];
+            $receiver = $this->receiverService->findById(id: $id, withRelations: $withRelations);
+            return ReceiverEditResource::make($receiver);
+        }catch (Exception|NotFoundException $exception)
+        {
+            return apiResponse(message: $exception->getMessage(),code: 404);
         }
     }
 
