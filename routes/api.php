@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\PhoneVerifyController;
 use App\Http\Controllers\Api\ReceiverController;
 use App\Http\Controllers\Api\RestPasswordController;
@@ -44,3 +45,5 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
     Route::apiResource('receivers', ReceiverController::class);
 
 });
+
+Route::apiResource('branches', BranchController::class);

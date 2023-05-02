@@ -26,4 +26,15 @@ class Address extends Model
     {
         return $this->belongsTo(Location::class,'area_id');
     }
+
+    public function getAreaNameAttribute()
+    {
+        return $this->relationLoaded('area') ? $this->area->title : null;
+    }
+
+    public function getCityNameAttribute()
+    {
+        return $this->relationLoaded('city') ? $this->city->title : null;
+    }
+
 }
