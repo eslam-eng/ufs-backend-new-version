@@ -36,8 +36,4 @@ class Receiver extends Model
         return $this->relationLoaded('branch') && isset($this->branch) ? $this->branch->name : null;
     }
 
-    public function getAddressNameAttribute()
-    {
-        return $this->relationLoaded('defaultAddress') && isset($this->defaultAddress) ? $this->defaultAddress->address : null;
-    }
 }
