@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\Address\AddressDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Address;
 use App\Models\Branch;
@@ -42,16 +43,16 @@ class AddressService extends BaseService
      * @param array $data
      * @return bool
      */
-    public function store(array $data = []): bool
+    public function store(AddressDTO $addressDto): bool
     {
-        $model = match ((int)$data['addressable_type']) {
-            Address::RECEIVER   => Receiver::find($data['addressable_id']),
-            Address::COMPANY    => Company::find($data['addressable_id']),
-            Address::BRANCH     => Branch::find($data['addressable_id']),
-            Address::DEPARTMENT => Department::find($data['addressable_id']),
+        $model = match ((int)$addressDto['addressable_type']) {
+            Address::RECEIVER   => Receiver::find($addressDto['addressable_id']),
+            Address::COMPANY    => Company::find($addressDto['addressable_id']),
+            Address::BRANCH     => Branch::find($addressDto['addressable_id']),
+            Address::DEPARTMENT => Department::find($addressDto['addressable_id']),
         };
         if (isset($model))
-            $address = $model->storeAddress(Arr::except($data,['addressable_type', 'addressable_id'] ));    
+            $model->storeAddress($addressDto->addressData());    
         return true;
     }
 

@@ -10,6 +10,7 @@ use App\Http\Resources\AddressResource;
 use App\Services\AddressService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AddressController extends Controller
 {
@@ -41,7 +42,11 @@ class AddressController extends Controller
     public function store(AddressStoreRequest $request)
     {
         try {
-            $this->addressService->store(data: $request->validated());
+            DB::beginTransaction();
+                $addressDto = $request->toAddressDTO();
+                $this->addressService->store(addressDto: $addressDto);
+            DB::commit();
+            
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Address;
 
+use App\DTO\Address\AddressDTO;
 use App\Http\Requests\BaseRequest;
 
 class AddressStoreRequest extends BaseRequest
@@ -33,5 +34,10 @@ class AddressStoreRequest extends BaseRequest
             'postal_code'=>'required|numeric',
             'is_default'=>'nullable|boolean',
         ];
+    }
+
+    public function toAddressDTO(): \App\DTO\BaseDTO
+    {
+        return AddressDTO::fromRequest($this->all());
     }
 }
