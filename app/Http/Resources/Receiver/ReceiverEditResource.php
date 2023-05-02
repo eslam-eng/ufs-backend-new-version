@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Receiver;
 
+use App\Http\Resources\AddressResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReceiverResource extends JsonResource
+class ReceiverEditResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,13 +20,11 @@ class ReceiverResource extends JsonResource
             'name' => $this->name,
             'phone' => $this->phone,
             'receiving_company' => $this->receiving_company,
-            'company_name' => $this->company_name,
-            'branch_name' => $this->branch_name,
-            'city_name' => $this->city_name,
-            'area_name' => $this->area_name,
+            'company_id' => $this->company_name,
+            'branch_id' => $this->branch_id,
             'reference' => $this->reference,
             'title' => $this->title,
-            'address' => $this->address_name
+            'addresses'=>AddressResource::collection($this->whenLoaded('addresses'))
         ];
     }
 }

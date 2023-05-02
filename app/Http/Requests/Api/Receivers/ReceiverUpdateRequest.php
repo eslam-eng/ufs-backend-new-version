@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Api\Receivers;
 
+use App\DTO\Receiver\ReceiverDTO;
 use App\Http\Requests\BaseRequest;
 
-class ReceiverStoreRequest extends BaseRequest
+class ReceiverUpdateRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,16 +24,17 @@ class ReceiverStoreRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'phone' => 'required|numeric|unique:receivers,phone',
+            'phone' => 'required|numeric|unique:receivers,phone,' . $this->receiver,
             'receiving_company' => 'nullable|string',
-            'branch_id' => 'required|numeric|exists:branches,id',
-            'city_id' => 'required|numeric|exists:locations,id',
-            'area_id' => 'required|numeric|exists:locations,id',
-            'reference' => 'nullable|string|unique:receivers,reference',
+            'branch_id' => 'required|integer|exists:branches,id',
+            'reference' => 'nullable|string|unique:receivers,reference,' . $this->receiver,
             'title' => 'nullable|string',
             'notes' => 'nullable|string',
-            'addresses' => 'required|array',
-            'addresses.*' => 'required|array',
         ];
+    }
+
+    public function toReceiverDTO(): \App\DTO\BaseDTO|ReceiverDTO
+    {
+        return ReceiverDTO::fromArray($this->all());
     }
 }

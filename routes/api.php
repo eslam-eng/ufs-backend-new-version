@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PhoneVerifyController;
 use App\Http\Controllers\Api\ReceiverController;
@@ -31,16 +32,19 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
         Route::post('set-fcm-token', [AuthController::class, 'setFcmToken']);
     });
 
-    Route::group(['prefix' => 'locations', function () {
-        Route::get('governorates', [LocationsController::class, 'getAllGovernorates']);
+    Route::group(['prefix' => 'locations'], function () {
+        Route::get('cities', [LocationsController::class, 'getAllCities']);
+        Route::get('areas', [LocationsController::class, 'getAllAreas']);
         Route::get('{parent_id}', [LocationsController::class, 'getLocationByParentId']);
-    }]);
+    });
 
     Route::resource('companies',CompanyController::class);
     Route::group(['prefix' => 'company'],function (){
         Route::get('{id}',[CompanyController::class,'getCompanyById']);
     });
 
-    Route::resource('receivers', ReceiverController::class);
 
 });
+Route::resource('receivers', ReceiverController::class);
+
+Route::resource('addresses', AddressController::class);

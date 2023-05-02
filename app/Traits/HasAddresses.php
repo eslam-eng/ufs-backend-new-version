@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Traits;
+
+use App\Enums\ActivationStatus;
 use App\Models\Address;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 trait HasAddresses
@@ -17,22 +20,10 @@ trait HasAddresses
         return $this->addresses()->create($data);
     }
 
-    public function updateAddress($data=[]): void
+    public function deleteAddresses(): int
     {
-        //todo update spacefic address with with id
-        $this->addresses->each(function ($address){
-            $address->delete();
-        });
-        $this->storeAddress($data);
+        return $this->addresses()->delete();
     }
 
-    public function deleteAddresses()
-    {
-
-        $this->addresses()->each(function ($address){
-           $address->delete();
-        });
-
-    }
 
 }
