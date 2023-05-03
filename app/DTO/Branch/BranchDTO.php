@@ -28,10 +28,6 @@ class BranchDTO extends BaseDTO
         protected int   $city_id,
         protected int   $area_id,
         protected string $address,
-        protected ?string $lat,
-        protected ?string $lng,
-        protected ?string $postal_code,
-        protected ?string $map_url,
         protected ?bool   $is_default,
     )
     {
@@ -46,11 +42,7 @@ class BranchDTO extends BaseDTO
             city_id: $request->city_id,
             area_id: $request->area_id,
             address: $request->address,
-            lat: $request->lat,
-            lng: $request->lng,
-            postal_code: $request->postal_code,
-            map_url: $request->map_url,
-            is_default: $request->is_default
+            is_default: true
         );
     }
 
@@ -68,11 +60,7 @@ class BranchDTO extends BaseDTO
             city_id: Arr::get($data,'city_id'),
             area_id: Arr::get($data,'area_id'),
             address: Arr::get($data,'address'),
-            lat: Arr::get($data,'lat'),
-            lng: Arr::get($data,'lng'),
-            postal_code: Arr::get($data,'postal'),
-            map_url: Arr::get($data,'map_url'),
-            is_default: Arr::get($data,'is_default')
+            is_default: true
         );
     }
 
@@ -88,10 +76,6 @@ class BranchDTO extends BaseDTO
             'city_id' => $this->city_id,
             'area_id' => $this->area_id,
             'address' => $this->address,
-            'lat' => $this->lat,
-            'lng' => $this->lng,
-            'postal_code' => $this->postal_code,
-            'map_url' => $this->map_url,
             'is_default' => $this->is_default
 
         ];
@@ -103,10 +87,6 @@ class BranchDTO extends BaseDTO
             'city_id' => $this->city_id,
             'area_id' => $this->area_id,
             'address' => $this->address,
-            'lat' => $this->lat,
-            'lng' => $this->lng,
-            'postal_code' => $this->postal_code,
-            'map_url' => $this->map_url,
             'is_default' => $this->is_default
 
         ];
@@ -121,12 +101,4 @@ class BranchDTO extends BaseDTO
         ];
     }
 
-    public static function getValidationArray(): array
-    {
-        return [];
-    }
-
-    public function validate(): void
-    {
-    }
 }
