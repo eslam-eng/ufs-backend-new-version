@@ -31,6 +31,7 @@ class CompanyController extends Controller
             DB::beginTransaction();
                 $receiverDto = $request->toCompanyDTO();
                 $this->companyService->store($receiverDto);
+                
             DB::commit();
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception $e) {

@@ -159,7 +159,7 @@ class CompanyDTO extends BaseDTO
                 'address' => $this->branches[$i]['address'],
                 'lat' => $this->branches[$i]['lat'],
                 'lng' => $this->branches[$i]['lng'],
-                'postal_code' => $this->branches[$i]['postal_code'],
+                'postal' => $this->branches[$i]['postal_code'],
                 'map_url' => $this->branches[$i]['map_url'],
                 'is_default' => true,
             ];

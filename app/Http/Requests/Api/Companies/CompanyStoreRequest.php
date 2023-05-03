@@ -26,7 +26,7 @@ class CompanyStoreRequest extends BaseRequest
             'name'=> 'required|string',
             'email'=> 'required|email',
             'ceo'=> 'required|string',
-            'phone'=> 'required|numeric|unique:compaines,phone',
+            'phone'=> 'required|numeric|unique:companies,phone',
             'show_dashboard'=> 'required|boolean',
             'notes'=> 'required|string',
             'status'=> 'required|boolean',

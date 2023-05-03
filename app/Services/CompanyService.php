@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\Branch\BranchDTO;
 use App\DTO\Company\CompanyDTO;
+use App\Models\Branch;
 use App\Models\Company;
 use App\QueryFilters\CompaniesFilter;
 use App\Services\BranchService;
@@ -39,20 +40,8 @@ class CompanyService extends BaseService
         $company->storeAddress($companyDTO->addressData());
         foreach($companyDTO->branchesData() as $branch)
         {
-            $this->branchService->store(new BranchDTO(
-                name: $branch['name'],
-                phone: $branch['phone'],
-                company_id: $company->id,
-                city_id: $branch['city_id'],
-                area_id: $branch['area_id'],
-                address: $branch['address'],
-                lat: $branch['lat'],
-                lng: $branch['lng'],
-                postal_code: $branch['postal_code'],
-                map_url: $branch['map_url'],
-                is_default: $branch['is_default'],
-            ));
-
+            $branch['company_id'] = $company->id;
+            $this->branchService->store(BranchDTO::fromArray(data: $branch));
         }
 
         foreach($companyDTO->departmentsData() as $department)
