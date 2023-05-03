@@ -2,20 +2,24 @@
 
 namespace App\Services;
 
+use App\DTO\Branch\BranchDTO;
+use App\DTO\Company\CompanyDTO;
 use App\Models\Company;
-use App\QueryFilters\LocationsFilter;
+use App\QueryFilters\CompaniesFilter;
+use App\Services\BranchService;
+use Illuminate\Support\Arr;
 
 class CompanyService extends BaseService
 {
 
-    public function __construct(public Company $model)
+    public function __construct(public Company $model, private BranchService $branchService)
     {
     }
 
     public function queryGet(array $filter = [],array $withRelations = [])
     {
         $result = $this->model->query()->with($withRelations);
-        return $result->filter(new LocationsFilter($filter));
+        return $result->filter(new CompaniesFilter($filter));
     }
 
 
@@ -24,14 +28,37 @@ class CompanyService extends BaseService
         return $this->queryGet($filters)->get();
     }
 
-    public function getLocationAncestors($id)
+    /**
+     * create new receiver
+     * @param array $data
+     * @return bool
+     */
+    public function store(CompanyDTO $companyDTO): bool
     {
-        return $this->model->defaultOrder()->ancestorsAndSelf($id);
-    }
+        $company = $this->model->create($companyDTO->companyData());
+        $company->storeAddress($companyDTO->addressData());
+        foreach($companyDTO->branchesData() as $branch)
+        {
+            $this->branchService->store(new BranchDTO(
+                name: $branch['name'],
+                phone: $branch['phone'],
+                company_id: $company->id,
+                city_id: $branch['city_id'],
+                area_id: $branch['area_id'],
+                address: $branch['address'],
+                lat: $branch['lat'],
+                lng: $branch['lng'],
+                postal_code: $branch['postal_code'],
+                map_url: $branch['map_url'],
+                is_default: $branch['is_default'],
+            ));
 
-    public function getLocationDescendants($location_id)
-    {
-        return $this->model->defaultOrder()->descendantsOf($location_id);
+        }
+
+        foreach($companyDTO->departmentsData() as $department)
+            $company->departments()->create($department);
+            
+        return true;
     }
 
 }

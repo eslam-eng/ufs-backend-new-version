@@ -175,15 +175,6 @@ class CompanyDTO extends BaseDTO
         {
             $data[$i] = [
                 'name' => $this->departments[$i]['name'],
-                'phone' => $this->departments[$i]['phone'],
-                'city_id' => $this->departments[$i]['city_id'],
-                'area_id' => $this->departments[$i]['area_id'],
-                'address' => $this->departments[$i]['address'],
-                'lat' => $this->departments[$i]['lat'],
-                'lng' => $this->departments[$i]['lng'],
-                'postal_code' => $this->departments[$i]['postal_code'],
-                'map_url' => $this->departments[$i]['map_url'],
-                'is_default' => true,
             ];
         }
         return $data;
