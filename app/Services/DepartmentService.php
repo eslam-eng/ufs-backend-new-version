@@ -33,15 +33,19 @@ class DepartmentService extends BaseService
         return $departments->filter(new DepartmentsFilters($filters));
     }
 
+    public function getAll(array $filters = [],array $withRelations=[]): \Illuminate\Database\Eloquent\Collection|array
+    {
+        return $this->departmentQueryBuilder(filters: $filters , withRelations: $withRelations)->get();
+    }
+
     /**
      * create new department
      * @param array $data
      * @return bool
      */
-    public function store(DepartmentDTO $departmentDTO): bool
+    public function store(DepartmentDTO $departmentDTO)
     {
-        $department = $this->model->create($departmentDTO->departmentData());
-        return true;
+       return $this->model->create($departmentDTO->toArray());
     }
 
     /**
@@ -56,7 +60,7 @@ class DepartmentService extends BaseService
         $department = $this->findById($id);
         if (!$department)
             throw new NotFoundException(trans('lang.not_found'));
-        $department->update($departmentDTO->departmentData());
+        $department->update($departmentDTO->toArray());
         return true;
     }
 

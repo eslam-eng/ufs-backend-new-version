@@ -24,16 +24,8 @@ class DepartmentStoreRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'company_id' => 'required|numeric|exists:companies,id',
+            'company_id' => 'required|integer|exists:companies,id',
         ];
-    }
-
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'is_default' => true,
-        ]);
-
     }
 
     public function toDepartmentDTO(): \App\DTO\BaseDTO

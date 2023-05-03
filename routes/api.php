@@ -48,9 +48,9 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
 
     Route::resource('branches', BranchController::class);
 
-});
-    Route::apiResource('branches', BranchController::class);
     Route::apiResource('departments', DepartmentController::class);
 
+
 });
+
 

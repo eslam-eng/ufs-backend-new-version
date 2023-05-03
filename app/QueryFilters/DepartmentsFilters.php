@@ -22,23 +22,6 @@ class DepartmentsFilters extends QueryFilter
         return $this->builder->whereRelation('department.company','id',$term);
     }
 
-    public function department_id($term)
-    {
-        return $this->builder->where('department_id',$term);
-
-    }
-
-    public function city_id($term)
-    {
-        return $this->builder->whereHas('addresses',fn($address)=>$address->where('city_id',$term));
-    }
-
-    public function area_id($term)
-    {
-        return $this->builder->whereHas('addresses',fn($address)=>$address->where('area_id',$term));
-
-    }
-
     public function keyword($term)
     {
         return $this->builder->where('name', 'LIKE', "{$term}%")->orWhere('phone', 'LIKE', "{$term}%");
