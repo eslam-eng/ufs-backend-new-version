@@ -25,5 +25,10 @@ trait HasAddresses
         return $this->addresses()->delete();
     }
 
+    public function updateAddress(array $data = [])
+    {
+        return $this->addresses()->update($data);
+    }
+
 
 }

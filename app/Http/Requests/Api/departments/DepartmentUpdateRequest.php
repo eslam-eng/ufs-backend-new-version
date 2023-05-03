@@ -24,7 +24,6 @@ class DepartmentUpdateRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'company_id' => 'required|integer|exists:companies,id',
         ];
     }
 

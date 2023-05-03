@@ -9,18 +9,11 @@ class DepartmentDTO extends BaseDTO
 {
 
     /**
-     * @param int $morphable_id
-     * @param int $buyer_time_type
-     * @param int $day
-     * @param int $time_from
-     * @param int $time_to
-     * @param string $morphable_type
+     * @param string $name
+     * @param int $company_id
      */
 
-    public function __construct(
-        protected string $name,
-        protected int    $company_id,
-    )
+    public function __construct(protected string $name, protected int $company_id)
     {
     }
 
@@ -56,21 +49,4 @@ class DepartmentDTO extends BaseDTO
         ];
     }
 
-
-    public function departmentData(): array
-    {
-        return [
-            "name" => $this->name,
-            "company_id" => $this->company_id,
-        ];
-    }
-
-    public static function getValidationArray(): array
-    {
-        return [];
-    }
-
-    public function validate(): void
-    {
-    }
 }

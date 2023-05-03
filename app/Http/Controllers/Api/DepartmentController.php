@@ -10,13 +10,11 @@ use App\Http\Resources\DepartmentResource;
 use App\Services\DepartmentService;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class DepartmentController extends Controller
 {
-    public function __construct(private DepartmentService $departmentService)
+    public function __construct(protected DepartmentService $departmentService)
     {
-
     }
 
     /**
@@ -26,8 +24,7 @@ class DepartmentController extends Controller
     {
         try {
             $filters = array_filter($request->all());
-            $withRelations = ['company:id,name'];
-            $departments = $this->departmentService->listing(filters: $filters, withRelations: $withRelations);
+            $departments = $this->departmentService->listing(filters: $filters);
             return DepartmentResource::collection($departments);
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
@@ -37,10 +34,7 @@ class DepartmentController extends Controller
     public function store(DepartmentStoreRequest $request)
     {
         try {
-            DB::beginTransaction();
-                $departmentDto = $request->toDepartmentDTO();
-                $this->departmentService->store($departmentDto);
-            DB::commit();
+            $this->departmentService->store($request->toDepartmentDTO());
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);

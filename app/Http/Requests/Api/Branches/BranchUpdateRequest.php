@@ -29,8 +29,6 @@ class BranchUpdateRequest extends BaseRequest
             'city_id' => 'required|integer|exists:locations,id',
             'area_id' => 'required|integer|exists:locations,id',
             'address' => 'required|string',
-            'postal_code' => 'string|nullable',
-            'map_url' => 'string|nullable',
         ];
     }
 

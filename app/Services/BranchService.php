@@ -33,6 +33,11 @@ class BranchService extends BaseService
         return $branches->filter(new BranchesFilters($filters));
     }
 
+    public function getAll(array $filters = [], array $withRelations = []): \Illuminate\Database\Eloquent\Collection|array
+    {
+        return $this->branchQueryBuilder(filters: $filters , withRelations: $withRelations)->get();
+    }
+
     /**
      * create new branch
      * @param array $data
@@ -58,7 +63,7 @@ class BranchService extends BaseService
         if (!$branch)
             throw new NotFoundException(trans('lang.not_found'));
         $branch->update($branchDTO->branchData());
-        $branch->storeAddress($branchDTO->addressData());
+        $branch->updateAddress($branchDTO->addressData());
         return true;
     }
 
