@@ -15,7 +15,6 @@ class DepartmentController extends Controller
 {
     public function __construct(protected DepartmentService $departmentService)
     {
-
     }
 
     /**
