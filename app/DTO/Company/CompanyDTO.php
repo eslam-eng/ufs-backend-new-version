@@ -26,8 +26,8 @@ class CompanyDTO extends BaseDTO
         protected ?string $map_url,
         protected ?bool   $is_default,
 
-        protected array $branches,
-        protected array $departments,
+        protected ?array $branches,
+        protected ?array $departments,
     )
     {
     }
