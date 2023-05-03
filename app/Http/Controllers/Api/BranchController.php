@@ -51,7 +51,7 @@ class BranchController extends Controller
     public function edit(int $id)
     {
         try {
-            $branch = $this->branchService->findById(id: $id,withRelations: ['company','addresses'=>fn($query)=>$query->with(['city','area'])]);
+            $branch = $this->branchService->findById(id: $id,withRelations: ['company','addresses']);
             return  BranchResource::make($branch);
         }catch (NotFoundException $exception){
             return apiResponse(message: $exception->getMessage(), code: 422);
