@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Traits;
+
+use App\Enums\ActivationStatus;
 use App\Models\Address;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 trait HasAddresses
@@ -22,9 +25,10 @@ trait HasAddresses
         return $this->addresses()->delete();
     }
 
-    public function updateAddress(array $data = []): int
+    public function updateAddress(array $data = [])
     {
-       return $this->addresses()->update($data);
+        return $this->addresses()->update($data);
     }
+
 
 }

@@ -26,6 +26,9 @@ class BranchUpdateRequest extends BaseRequest
             'name' => 'required|string',
             'phone' => 'required|numeric|unique:branches,phone,' . $this->branch,
             'company_id' => 'required|integer|exists:companies,id',
+            'city_id' => 'required|integer|exists:locations,id',
+            'area_id' => 'required|integer|exists:locations,id',
+            'address' => 'required|string',
         ];
     }
 

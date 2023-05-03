@@ -20,7 +20,7 @@ class Branch extends Model
         return $this->belongsTo(Company::class,'company_id');
     }
 
-    public function defaultAddress(): MorphOne
+    public function addresses(): MorphOne
     {
         return $this->MorphOne(Address::class, 'addressable')->where('is_default', ActivationStatus::ACTIVE());
     }

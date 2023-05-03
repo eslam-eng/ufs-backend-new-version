@@ -26,7 +26,7 @@ class BranchController extends Controller
     {
         try {
             $filters = array_filter($request->all());
-            $withRelations = ['company:id,name','defaultAddress'=>fn($query)=>$query->with(['city','area'])];
+            $withRelations = ['company:id,name','addresses'=>fn($query)=>$query->with(['city','area'])];
             $branches = $this->branchService->listing(filters: $filters, withRelations: $withRelations);
             return BranchResource::collection($branches);
         } catch (Exception $e) {
@@ -43,15 +43,31 @@ class BranchController extends Controller
             DB::commit();
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception $e) {
+            DB::rollBack();
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
+        }
+    }
+
+    public function edit(int $id)
+    {
+        try {
+            $branch = $this->branchService->findById(id: $id,withRelations: ['company','addresses']);
+            return  BranchResource::make($branch);
+        }catch (NotFoundException $exception){
+            return apiResponse(message: $exception->getMessage(), code: 422);
+        }catch (Exception $exception){
+            return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
+
         }
     }
 
     public function update(BranchUpdateRequest $request, int $id)
     {
         try {
-            $branchDTO = $request->toBranchDTO();
-            $this->branchService->update($id, $branchDTO);
+            DB::beginTransaction();
+            $branchDto = $request->toBranchDTO();
+            $this->branchService->update($id, $branchDto);
+            DB::commit();
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception|NotFoundException $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);

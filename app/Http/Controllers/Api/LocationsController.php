@@ -20,9 +20,15 @@ class LocationsController extends Controller
     {
     }
 
-    public function getAllGovernorates(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function getAllCities(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $governorates = $this->locationService->getAll(['depth' => 1]);
+        return LocationsResource::collection($governorates);
+    }
+
+    public function getAllAreas(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    {
+        $governorates = $this->locationService->getAll(['depth' => 2]);
         return LocationsResource::collection($governorates);
     }
 

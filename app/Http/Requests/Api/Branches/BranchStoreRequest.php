@@ -24,15 +24,11 @@ class BranchStoreRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'phone' => 'required|numeric|unique:branches,phone',
-            'company_id' => 'required|numeric|exists:companies,id',
+            'phone' => 'required|string|unique:branches,phone',
+            'company_id' => 'required|integer|exists:companies,id',
             'city_id' => 'required|integer|exists:locations,id',
             'area_id' => 'required|integer|exists:locations,id',
             'address' => 'required|string',
-            'lat' => 'string|nullable',
-            'lng' => 'string|nullable',
-            'postal_code' => 'string|nullable',
-            'map_url' => 'string|nullable',
         ];
     }
 
