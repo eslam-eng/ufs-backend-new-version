@@ -25,8 +25,8 @@ class CompanyStoreRequest extends BaseRequest
         return [
             'name'=> 'required|string',
             'email'=> 'required|email|unique:companies,email',
-            'ceo'=> 'required|string',
-            'phone'=> 'required|numeric|unique:companies,phone',
+            'ceo'=> 'nullable|string',
+            'phone'=> 'required|integer|unique:companies,phone',
             'show_dashboard'=> 'required|boolean',
             'notes'=> 'required|string',
             'status'=> 'required|boolean',
@@ -34,22 +34,10 @@ class CompanyStoreRequest extends BaseRequest
             'city_id'=> 'required|integer|exists:locations,id',
             'area_id'=> 'required|integer|exists:locations,id',
             'address'=> 'required|string',
-            'lat'=> 'required|numeric',
-            'lng'=> 'required|numeric',
-            'postal_code'=> 'required|numeric',
-            'map_url'=> 'required|url',
-            
+
             'branches'=> 'required|array',
             'departments'=> 'required|array',
         ];
-    }
-
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-            'is_default' => true,
-        ]);
-
     }
 
     public function toCompanyDTO(): \App\DTO\BaseDTO

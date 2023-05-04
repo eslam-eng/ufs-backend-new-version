@@ -11,23 +11,18 @@ class CompanyDTO extends BaseDTO
     public function __construct(
         protected string $name,
         protected string $email,
-        protected string $ceo,
+        protected ?string $ceo,
         protected string $phone,
         protected bool   $show_dashboard,
-        protected string $notes,
+        protected ?string $notes,
         protected ?bool  $status,
-
+        protected bool   $is_default = true,
         protected ?int    $city_id,
         protected ?int    $area_id,
         protected ?string $address,
-        protected ?string $lat,
-        protected ?string $lng,
-        protected ?string $postal_code,
-        protected ?string $map_url,
-        protected ?bool   $is_default,
 
-        protected ?array $branches,
         protected ?array $departments,
+        protected ?array $branches,
     )
     {
     }
@@ -43,17 +38,13 @@ class CompanyDTO extends BaseDTO
             notes: $request->notes,
             status: $request->status,
 
+            is_default: $request->is_default,
             city_id: $request->city_id,
             area_id: $request->area_id,
             address: $request->address,
-            lat: $request->lat,
-            lng: $request->lng,
-            postal_code: $request->postal_code,
-            map_url: $request->map_url,
-            is_default: $request->is_default,
-            
-            branches: $request->branches,
+
             departments: $request->departments,
+            branches: $request->branches,
         );
     }
 
@@ -73,17 +64,13 @@ class CompanyDTO extends BaseDTO
             notes: Arr::get($data,'notes'),
             status: Arr::get($data,'status'),
 
+            is_default: Arr::get($data,'is_default',true),
             city_id: Arr::get($data,'city_id'),
             area_id: Arr::get($data,'area_id'),
             address: Arr::get($data,'address'),
-            lat: Arr::get($data,'lat'),
-            lng: Arr::get($data,'lng'),
-            postal_code: Arr::get($data,'postal_code'),
-            map_url: Arr::get($data,'map_url'),
-            is_default: Arr::get($data,'is_default'),
-            
-            branches: Arr::get($data,'branches'),
+
             departments: Arr::get($data,'departments'),
+            branches: Arr::get($data,'branches'),
 
         );
     }
@@ -105,12 +92,8 @@ class CompanyDTO extends BaseDTO
             'city_id'=> $this->city_id,
             'area_id'=> $this->area_id,
             'address'=> $this->address,
-            'lat'=> $this->lat,
-            'lng'=> $this->lng,
-            'postal_code'=> $this->postal_code,
-            'map_url'=> $this->map_url,
             'is_default'=> $this->is_default,
-            
+
             'branches'=> $this->branches,
             'departments'=> $this->departments,
         ];
@@ -123,10 +106,6 @@ class CompanyDTO extends BaseDTO
             'city_id'=> $this->city_id,
             'area_id'=> $this->area_id,
             'address'=> $this->address,
-            'lat'=> $this->lat,
-            'lng'=> $this->lng,
-            'postal_code'=> $this->postal_code,
-            'map_url'=> $this->map_url,
             'is_default'=> $this->is_default,
 
         ];
@@ -180,12 +159,4 @@ class CompanyDTO extends BaseDTO
         return $data;
     }
 
-    public static function getValidationArray(): array
-    {
-        return [];
-    }
-
-    public function validate(): void
-    {
-    }
 }

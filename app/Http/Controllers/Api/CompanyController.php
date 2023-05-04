@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Companies\CompanyStoreRequest;
 use App\Http\Requests\Api\Companies\CompanyUpdateRequest;
 use App\Http\Resources\Company\CompanyResource;
+use App\Models\Company;
 use App\Services\CompanyService;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,17 +23,12 @@ class CompanyController extends Controller
     {
         try {
             $filters = array_filter($request->all());
-            $withRelations = ['defaultAddress'];
+            $withRelations = ['addresses'=>fn($query)=>$query->with(['city','area'])];
             $companies = $this->companyService->listing(filters: $filters, withRelations: $withRelations);
             return CompanyResource::collection($companies);
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: $e->getCode());
         }
-    }
-
-    public function create()
-    {
-
     }
 
     public function store(CompanyStoreRequest $request)
@@ -41,17 +37,19 @@ class CompanyController extends Controller
             DB::beginTransaction();
                 $receiverDto = $request->toCompanyDTO();
                 $this->companyService->store($receiverDto);
-                
             DB::commit();
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception $e) {
+            DB::rollBack();
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
         }
     }
 
     public function edit(int $id)
     {
-
+        $withRelations = ['addresses'];
+        $company = $this->companyService->findById(id: $id, withRelations: $withRelations);
+        return CompanyResource::make($company);
     }
 
     public function update(CompanyUpdateRequest $request, int $id)

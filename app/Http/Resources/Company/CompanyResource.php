@@ -21,11 +21,13 @@ class CompanyResource extends JsonResource
             'ceo'=> $this->ceo,
             'phone'=> $this->phone,
             'show_dashboard'=> $this->show_dashboard,
-            'notes'=> $this->notes,
             'status'=> $this->status,
-            'city_name' => $this->defaultAddress->city_name,
-            'area_name' => $this->defaultAddress->area_name,
-            'address'=>$this->defaultAddress->address,
+            'city_name' => $this->addresses->city_name,
+            'city_id' => $this->addresses->city->id,
+            'area_name' => $this->addresses->area_name,
+            'area_id' => $this->addresses->area->id,
+            'address'=>$this->addresses->address,
+            'notes'=> $this->notes,
         ];
     }
 }

@@ -17,9 +17,9 @@ class Company extends Model
     protected $fillable = ['name', 'email','ceo', 'phone', 'show_dashboard', 'notes', 'status'];
 
 
-    public function defaultAddress(): MorphOne
+    public function addresses(): MorphOne
     {
-        return $this->MorphOne(Address::class, 'addressable')->where('is_default', ActivationStatus::ACTIVE())->with('city','area');
+        return $this->MorphOne(Address::class, 'addressable')->where('is_default', ActivationStatus::ACTIVE());
     }
 
     public function branches(): HasMany
@@ -30,6 +30,11 @@ class Company extends Model
     public function departments(): HasMany
     {
         return $this->hasMany(Department::class);
+    }
+
+    public function scopeSearch($builder, $term)
+    {
+        return $builder->where('name', 'LIKE', $term)->orWhere('phone', 'LIKE', $term);
     }
 
 }
