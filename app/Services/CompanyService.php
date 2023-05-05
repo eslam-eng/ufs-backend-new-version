@@ -7,7 +7,6 @@ use App\DTO\Company\CompanyDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Company;
 use App\QueryFilters\CompaniesFilter;
-use App\Services\BranchService;
 use Illuminate\Database\Eloquent\Builder;
 
 

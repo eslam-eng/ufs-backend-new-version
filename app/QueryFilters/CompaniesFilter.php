@@ -16,4 +16,18 @@ class CompaniesFilter extends QueryFilter
     {
         return $this->builder->where('status',$term);
     }
+
+    public function city_id($term)
+    {
+        return $this->builder->where('status',$term);
+    }
+
+    public function area_id($term){
+        return $this->builder->where('status',$term);
+    }
+
+    public function keyword($term)
+    {
+        return $this->builder->search($term);
+    }
 }
