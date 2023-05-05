@@ -92,4 +92,19 @@ class CompanyService extends BaseService
         return true;
     }
 
+    /**
+     * @throws NotFoundException
+     */
+    public function destroyMultiple(array $ids): bool
+    {
+        $companies = $this->findByIds($ids);
+        if ($companies->isEmpty())
+            throw new NotFoundException(trans('lang.not_found'));
+        $companies->each(function ($company) {
+            $company->delete();
+            $company->deleteAddresses();
+        });
+        return true;
+    }
+
 }
