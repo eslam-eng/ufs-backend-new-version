@@ -10,7 +10,9 @@ use App\Http\Requests\Api\Companies\CompanyUpdateRequest;
 use App\Http\Resources\Company\CompanyDropDownResource;
 use App\Http\Resources\Company\CompanyResource;
 use App\Services\CompanyService;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
