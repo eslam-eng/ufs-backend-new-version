@@ -17,21 +17,26 @@ class CompanyService extends BaseService
     {
     }
 
-    public function queryGet(array $filter = [],array $withRelations = []): builder
+    public function getModel(): Company
+    {
+        return $this->model ;
+    }
+
+    public function queryGet(array $filters = [],array $withRelations = []): builder
     {
         $result = $this->model->query()->with($withRelations);
-        return $result->filter(new CompaniesFilter($filter));
+        return $result->filter(new CompaniesFilter($filters));
     }
 
 
     public function listing(array $filters = [], $withRelations  = [], $perPage = 10): \Illuminate\Contracts\Pagination\CursorPaginator
     {
-        return $this->queryGet($filters)->cursorPaginate($perPage);
+        return $this->queryGet(filters: $filters,withRelations: $withRelations)->cursorPaginate($perPage);
     }
 
     public function getCompaniesForSelectDropDown(array $filters = []): \Illuminate\Database\Eloquent\Collection|array
     {
-        return $this->queryGet(filter: $filters)->select(['id','name'])->get();
+        return $this->queryGet(filters: $filters)->select(['id','name'])->get();
     }
 
     /**
@@ -64,7 +69,7 @@ class CompanyService extends BaseService
      */
     public function update(int $id, CompanyDTO $companyDTO): bool
     {
-        $company = Company::find($id);
+        $company = $this->findById($id);
         if (!$company)
             throw new NotFoundException(trans('lang.not_found'));
         $company->update($companyDTO->companyData());
@@ -79,7 +84,7 @@ class CompanyService extends BaseService
      */
     public function destroy(int $id): bool
     {
-        $company = Company::find($id);
+        $company = $this->findById($id);
         if (!$company)
             throw new NotFoundException(trans('lang.not_found'));
         $company->delete();
