@@ -7,7 +7,6 @@ use App\DTO\Company\CompanyDTO;
 use App\Exceptions\NotFoundException;
 use App\Models\Company;
 use App\QueryFilters\CompaniesFilter;
-use App\Services\BranchService;
 use Illuminate\Database\Eloquent\Builder;
 
 
@@ -30,6 +29,11 @@ class CompanyService extends BaseService
         return $this->queryGet($filters)->cursorPaginate($perPage);
     }
 
+    public function getCompaniesForSelectDropDown(array $filters = []): \Illuminate\Database\Eloquent\Collection|array
+    {
+        return $this->queryGet(filter: $filters)->select(['id','name'])->get();
+    }
+
     /**
      * create new receiver
      * @param array $data
@@ -47,7 +51,7 @@ class CompanyService extends BaseService
 
         foreach($companyDTO->departmentsData() as $department)
             $company->departments()->create($department);
-            
+
         return true;
     }
 

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\UsersType;
 use App\Exceptions\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Companies\CompanyStoreRequest;
 use App\Http\Requests\Api\Companies\CompanyUpdateRequest;
+use App\Http\Resources\Company\CompanyDropDownResource;
 use App\Http\Resources\Company\CompanyResource;
-use App\Models\Company;
 use App\Services\CompanyService;
 use Exception;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class CompanyController extends Controller
     {
         try {
             $filters = array_filter($request->all());
-            $withRelations = ['addresses'=>fn($query)=>$query->with(['city','area'])];
+            $withRelations = ['addresses' => fn($query) => $query->with(['city', 'area'])];
             $companies = $this->companyService->listing(filters: $filters, withRelations: $withRelations);
             return CompanyResource::collection($companies);
         } catch (Exception $e) {
@@ -35,14 +36,24 @@ class CompanyController extends Controller
     {
         try {
             DB::beginTransaction();
-                $receiverDto = $request->toCompanyDTO();
-                $this->companyService->store($receiverDto);
+            $receiverDto = $request->toCompanyDTO();
+            $this->companyService->store($receiverDto);
             DB::commit();
             return apiResponse(message: trans('lang.success_operation'));
         } catch (Exception $e) {
             DB::rollBack();
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
         }
+    }
+
+    public function getCompaniesForDropDown()
+    {
+        $filters = [];
+        $auth_user = getAuthUser();
+        if ($auth_user->type != UsersType::SUPERADMIN)
+            $filters['id'] = $auth_user->id ;
+        $companies =  $this->companyService->getCompaniesForSelectDropDown($filters);
+        return CompanyDropDownResource::collection($companies);
     }
 
     public function edit(int $id)
@@ -75,11 +86,6 @@ class CompanyController extends Controller
         } catch (Exception $e) {
             return apiResponse(message: trans('lang.something_went_wrong'), code: 422);
         }
-    }
-
-    public function getCompanyById(int $id)
-    {
-
     }
 
 }
