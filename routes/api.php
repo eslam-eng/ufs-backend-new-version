@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\LocationsController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\DepartmentController;
+use App\Http\Controllers\Api\GovernorateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,5 +55,6 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
 
 });
 Route::resource('countries', CountryController::class);
+Route::resource('governorates', GovernorateController::class);
 
 
