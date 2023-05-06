@@ -13,10 +13,13 @@ return new class extends Migration {
 
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->string('slug', 191)->nullable();
             $table->text('title');
-            $table->tinyInteger('status')->default(\App\Enums\ActivationStatus::ACTIVE->value);
-            $table->nestedSet();
+            $table->float('shipping_cost')->default(0);
+            $table->foreignIdFor(\App\Models\Currency::class)->nullable()->constrained()->onUpdate('cascade')->onDelete('set null');
+            $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
+            $table->nestedSet();
         });
 
     }

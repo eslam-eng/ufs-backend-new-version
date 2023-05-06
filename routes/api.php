@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ReceiverController;
 use App\Http\Controllers\Api\RestPasswordController;
 use App\Http\Controllers\Api\LocationsController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\DepartmentController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,5 +53,6 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
 
 
 });
+Route::resource('countries', CountryController::class);
 
 
