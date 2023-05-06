@@ -2,33 +2,53 @@
 
 namespace Database\Seeders;
 
-use App\Models\Location;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class LocationsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
+        $node = \App\Models\Location::create(
+        [
 
-        $node = Location::create([
-            'title' => 'Egypt',
-            'children' => [
-                [
-                    'title' => 'Cairo',
-                    'children' => [
-                        [ 'title' => 'naser city'],
+                'slug' => 'Eg',
+                'title' => 'Egypt',
+                'children' => [
+                    [
+                        'slug' => 'Ca',
+                        'title' => 'Cairo',
+                        'children' => [
+                            ['slug' => 'Gi', 'title' => 'Giza'],
+                            ['slug' => 'Alm', 'title' => 'Almokattem'],
+                            ['slug' => 'nas', 'title' => 'Nasr city'],
+                        ],
+                    ],
+                    [
+                        'slug' => 'bns',
+                        'title' => 'Banisuef',
+                        'children' => [
+                            ['slug' => 'Eh', 'title' => 'Ehnasia'],
+                            ['slug' => 'Bb', 'title' => 'Biba'],
+                            ['slug' => 'nas', 'title' => 'Elfashn'],
+                        ],
+                    ],
+                    [
+                        'slug' => 'GZ',
+                        'title' => 'Giza',
+                        'children' => [
+                            ['slug' => 'elayat', 'title' => '3ayat'],
+                            ['slug' => 'saft', 'title' => 'Saft'],
+                        ],
                     ],
                 ],
-                [
-                    'title' => 'Giza',
-                    'children' => [
-                        [ 'title' => 'ramsis'],
-                    ],
-                ],
-            ],
-        ]);
-    }
+
+        ]
+    );
+  }
 }
