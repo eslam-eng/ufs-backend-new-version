@@ -28,21 +28,6 @@ class GovernorateController extends Controller
         }
     }
 
-    public function getAllGovernorates(Request $request)
-    {
-        
-        try {
-            $filter =[
-                'is_active'=>1,
-                'parent' =>  $request->country_id,
-            ];
-            $governorates = $this->locationsService->getAll($filter);
-            return LocationsResource::collection($governorates);
-        } catch (Exception $e) {
-            return apiResponse(message: trans('lang.something_went_wrong'), code: 442);
-        }
-    }
-
     public function store(StoreLocationRequest $request)
     {
         try {
