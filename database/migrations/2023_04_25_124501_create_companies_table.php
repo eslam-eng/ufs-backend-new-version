@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('show_dashboard')->default(\App\Enums\ActivationStatus::INACTIVE->value);
             $table->string('notes')->nullable();
             $table->boolean('status')->default(\App\Enums\ActivationStatus::ACTIVE->value);
+            $table->boolean('store_receivers')->default(false);
             $table->timestamps();
         });
     }

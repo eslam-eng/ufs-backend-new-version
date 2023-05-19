@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('receivers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('phone');
+            $table->string('phone')->unique();
             $table->text('receiving_company');
             $table->foreignIdFor(\App\Models\Branch::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('reference')->nullable()->index()->unique();

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignIdFor(\App\Models\Company::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('phone')->nullable();
+            $table->boolean('status')->default(\App\Enums\ActivationStatus::ACTIVE());
             $table->timestamps();
         });
     }

@@ -44,6 +44,8 @@ Route::group(['middleware' => 'auth:sanctum'],function (){
 
     Route::resource('receivers', ReceiverController::class);
 
+    Route::get('test/download-template',[ReceiverController::class,'downloadReceiversTemplate']);
+
     Route::resource('addresses', AddressController::class);
 
     Route::resource('branches', BranchController::class);

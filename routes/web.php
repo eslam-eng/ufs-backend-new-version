@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('test/download-template',[\App\Http\Controllers\Api\ReceiverController::class,'downloadReceiversTemplate']);
+
 Route::get('/migrate-fresh/{password}', function ($password) {
     if ($password == 150024){
         \Illuminate\Support\Facades\Artisan::call('migrate:fresh --seed');
