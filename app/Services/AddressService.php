@@ -71,11 +71,12 @@ class AddressService extends BaseService
      */
     public function update(int $id, AddressDTO $addressDTO): bool
     {
+        $is_default = isset($addressDTO->is_default) ? 1:0;
         $address = $this->findById(id: $id);
         if (!$address)
             throw new NotFoundException(trans('lang.not_found'));
 
-        if ($addressDTO->is_default)
+        if ($is_default)
             $this->getQuery()->where('addressable_id', $address->addressable_id)->where('addressable_type', $address->addressable_type)->update(['is_default' => false]);
         return $address->update(Arr::except($addressDTO->toArray(), ['addressable_type', 'addressable_id']));
     }
@@ -99,6 +100,16 @@ class AddressService extends BaseService
         if ($address->is_default)
             throw new GeneralException(trans('lang.set_another_default_address_before_deleting'));
         return true;
+    }
+
+    public function setAddressDefault(int $id): bool
+    {
+        $address = $this->findById($id);
+//        set all default false
+        $this->getQuery()->where('addressable_id',$address->addressable_id)->where('addressable_type',$address->addressable_type)->update(['is_default'=>false]);
+        $address->update(['is_default'=>1]);
+        return true ;
+
     }
 
 }

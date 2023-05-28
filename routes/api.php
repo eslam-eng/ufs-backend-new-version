@@ -1,14 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\AddressController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\BranchController;
-use App\Http\Controllers\Api\PhoneVerifyController;
-use App\Http\Controllers\Api\ReceiverController;
-use App\Http\Controllers\Api\RestPasswordController;
-use App\Http\Controllers\Api\LocationsController;
-use App\Http\Controllers\Api\CompanyController;
-use App\Http\Controllers\Api\DepartmentController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,42 +9,11 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
 |
 */
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('phone/verify', PhoneVerifyController::class);
-    Route::post('password/forget', PhoneVerifyController::class);
-    Route::post('password/reset', RestPasswordController::class);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
-Route::group(['middleware' => 'auth:sanctum'],function (){
-
-    Route::group(['prefix' => 'user'], function () {
-        Route::post('set-fcm-token', [AuthController::class, 'setFcmToken']);
-    });
-
-    Route::group(['prefix' => 'locations'], function () {
-        Route::get('cities', [LocationsController::class, 'getAllCities']);
-        Route::get('areas', [LocationsController::class, 'getAllAreas']);
-        Route::get('{parent_id}', [LocationsController::class, 'getLocationByParentId']);
-    });
-
-    Route::resource('companies',CompanyController::class);
-
-    Route::resource('receivers', ReceiverController::class);
-
-    Route::get('test/download-template',[ReceiverController::class,'downloadReceiversTemplate']);
-
-    Route::resource('addresses', AddressController::class);
-
-    Route::resource('branches', BranchController::class);
-
-    Route::apiResource('departments', DepartmentController::class);
-
-
-});
-
-

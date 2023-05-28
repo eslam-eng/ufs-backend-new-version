@@ -83,4 +83,9 @@ class BranchService extends BaseService
         return true;
     }
 
+    public function getBranchesForSelectDropDown(array $filters = []): \Illuminate\Database\Eloquent\Collection|array
+    {
+        return $this->branchQueryBuilder(filters: $filters)->select(['id','name'])->get();
+    }
+
 }

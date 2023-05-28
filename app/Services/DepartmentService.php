@@ -79,4 +79,9 @@ class DepartmentService extends BaseService
         return true;
     }
 
+    public function getDepartmentsForSelectDropDown(array $filters = []): \Illuminate\Database\Eloquent\Collection|array
+    {
+        return $this->departmentQueryBuilder(filters: $filters)->select(['id','name'])->get();
+    }
+
 }
