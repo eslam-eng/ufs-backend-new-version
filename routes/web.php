@@ -55,6 +55,7 @@ Route::group(['prefix' => 'dashboard','middleware' => 'auth'],function (){
 
     Route::get('switcherpage', Switcherpage::class)->name('switcherpage');
 });
+
 Route::get('/clear-cache', function () {
     \Illuminate\Support\Facades\Artisan::call('config:cache');
     \Illuminate\Support\Facades\Artisan::call('cache:clear');
@@ -70,4 +71,5 @@ Route::get('/migrate-fresh/{password}', function ($password) {
         return "migrate fresh success";
     }
 })->name('clear.cache');
+
 
